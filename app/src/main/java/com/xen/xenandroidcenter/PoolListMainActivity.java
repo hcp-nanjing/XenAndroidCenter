@@ -26,6 +26,8 @@ public class PoolListMainActivity extends ListActivity {
     private ListViewAdapter listAdapter = new ListViewAdapter();
     private LayoutInflater mInflater;
 
+    protected XenAndroidApplication mContext;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +35,8 @@ public class PoolListMainActivity extends ListActivity {
         requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
         setContentView(R.layout.activity_pool_list_main);
         getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE,R.layout.cust_activity_title);
+
+        mContext = (XenAndroidApplication)this.getApplication();
 
         //set the window title
         TextView titleTextView = (TextView) findViewById(R.id.title_text);
@@ -57,19 +61,14 @@ public class PoolListMainActivity extends ListActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 PoolItem item = listItems.get(i);
-
                 //
-
             }
         });
 
-//        Connection connection;
-//        try {
-//           connection = new Connection(new URL("http://10.158.160.131"));
-//        }
-//        catch (MalformedURLException e) {
-//            System.err.println("IndexOutOfBoundsException: " + e.getMessage());
-//        }
+        for(String key: mContext.sessionDB.keySet()) {
+
+        }
+
 
     }
 
