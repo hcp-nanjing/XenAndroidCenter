@@ -5,6 +5,8 @@ import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,13 +25,13 @@ import com.xensource.xenapi.Connection;
 import com.xensource.xenapi.Session;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class PoolListMainActivity extends ListActivity {
     private ListView poolListView;
     private ArrayList<PoolItem> listItems = new ArrayList<PoolItem>();
-    private ListViewAdapter listAdapter = new ListViewAdapter();
-    private LayoutInflater mInflater;
+    private ListViewAdapter listAdapter;
 
     protected XenAndroidApplication mContext;
 
@@ -47,9 +49,12 @@ public class PoolListMainActivity extends ListActivity {
         TextView titleTextView = (TextView) findViewById(R.id.title_text);
         titleTextView.setText(getResources().getString(R.string.title_activity_pool_list_main));
 
-        mInflater = this.getLayoutInflater();
-        poolListView = this.getListView();
-        listAdapter = new ListViewAdapter();
+        poolListView = getListView();
+        TextView emptyView = (TextView)findViewById(android.R.id.empty);
+        poolListView.setEmptyView(emptyView);
+
+        listAdapter = new ListViewAdapter(this, R.layout.pool_list_item_view, listItems);
+        poolListView.setAdapter(listAdapter);
 
         ImageButton addPoolBtn = (ImageButton) findViewById(R.id.title_btn);
         addPoolBtn.setOnClickListener(new View.OnClickListener() {
@@ -59,8 +64,6 @@ public class PoolListMainActivity extends ListActivity {
                 startActivity(intent);
             }
         });
-
-        setListAdapter(listAdapter);
 
         poolListView.setOnItemClickListener( new AdapterView.OnItemClickListener() {
             @Override
@@ -74,23 +77,27 @@ public class PoolListMainActivity extends ListActivity {
     @Override
     protected void onResume() {
 
-        for(String key: mContext.sessionDB.keySet()) {
-            Log.d("Session", key);
-            PoolItem poolItem = mContext.sessionDB.get(key);
-            listItems.add(poolItem);
-            listAdapter.notifyDataSetChanged();
-        }
+        Log.d("onResume", "onResume()");
+        refleshAdaptorData();
 
         super.onResume();
     }
 
-    private static class PoolListViewHolder {
+    static class PoolListViewHolder {
         View itemView;
         PoolItem item;
     };
 
-    private class ListViewAdapter extends BaseAdapter {
-        public ListViewAdapter() {
+    class ListViewAdapter extends ArrayAdapter<PoolItem> {
+        private Context mContext;
+        int layoutResId;
+        private List<PoolItem> listItems;
+
+        public ListViewAdapter(Context context, int resID, List<PoolItem> listItems) {
+            super(context, resID, listItems);
+            this.layoutResId = resID;
+            this.mContext = context;
+            this.listItems = listItems;
         }
 
         @Override
@@ -112,25 +119,38 @@ public class PoolListMainActivity extends ListActivity {
         }
 
         public View getView(final int position, View convertView, ViewGroup parent) {
+            Log.d("getView", "getView()");
             PoolListViewHolder holder;
             PoolItem item = getItem(position);
-            if(item == null) return null;
+            if(item == null) {
+                Log.d("getView", "return null");
+                return null;
+            }
 
             if (convertView == null) {
                 holder = new PoolListViewHolder();
-
-                convertView = mInflater.inflate(R.layout.pool_list_item_view, null);
+                convertView = ((LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(layoutResId, parent, false);
                 holder.itemView = convertView;
                 convertView.setTag(holder);
             } else {
                 holder = (PoolListViewHolder) convertView.getTag();
             }
 
+            Log.d("getView", item.getHostName());
             holder.item = item;
-            TextView pool_name = (TextView) holder.itemView.findViewById(R.id.pool_name);
-            pool_name.setText("pool_name");
+            TextView pool_name_view = (TextView) holder.itemView.findViewById(R.id.pool_name);
+            pool_name_view.setText(item.getHostName());
             return convertView;
         }
     };
 
+    public void refleshAdaptorData() {
+        listItems.clear();
+        for (String key : mContext.sessionDB.keySet()) {
+            Log.d("refleshAdaptorData", key);
+            PoolItem poolItem = mContext.sessionDB.get(key);
+            listItems.add(poolItem);
+            listAdapter.notifyDataSetChanged();
+        }
+    }
 }
