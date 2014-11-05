@@ -3,6 +3,7 @@ package com.xen.xenandroidcenter;
 
 import android.app.ListActivity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -45,8 +46,8 @@ public class PoolListMainActivity extends ListActivity {
         addPoolBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                listAdapter.notifyDataSetChanged();
+                Intent intent = new Intent(PoolListMainActivity.this, LoginActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -57,7 +58,7 @@ public class PoolListMainActivity extends ListActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 PoolItem item = listItems.get(i);
 
-                //Intent intent = new Intent(PoolListMainActivity.this.getActivity(), PoolLoginActivity.class);
+                //
 
             }
         });

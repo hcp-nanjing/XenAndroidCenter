@@ -2,7 +2,6 @@ package com.xen.xenandroidcenter;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.ContentResolver;
@@ -20,7 +19,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -30,7 +28,7 @@ import java.util.List;
 
 
 /**
- * A login screen that offers login via email/password.
+ * A login screen that offers login via username/password.
 
  */
 public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>{
