@@ -1,5 +1,7 @@
 package com.xen.xenandroidcenter;
 
+import com.xensource.xenapi.Session;
+
 /**
  * Created by zhengc on 11/5/2014.
  */
@@ -9,6 +11,16 @@ public class PoolItem {
     private String hostName;
     private String userName;
     private String password;
+
+    public Session getSession() {
+        return session;
+    }
+
+    public void setSession(Session session) {
+        this.session = session;
+    }
+
+    private Session session = null;
 
     public String getHostName() {
         return hostName;

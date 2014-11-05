@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,10 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.xensource.xenapi.Connection;
+import com.xensource.xenapi.Session;
+
 import java.util.ArrayList;
 
 
@@ -64,12 +69,19 @@ public class PoolListMainActivity extends ListActivity {
                 //
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
 
         for(String key: mContext.sessionDB.keySet()) {
-
+            Log.d("Session", key);
+            PoolItem poolItem = mContext.sessionDB.get(key);
+            listItems.add(poolItem);
+            listAdapter.notifyDataSetChanged();
         }
 
-
+        super.onResume();
     }
 
     private static class PoolListViewHolder {
