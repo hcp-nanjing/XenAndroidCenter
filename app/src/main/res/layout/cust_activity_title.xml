@@ -1,22 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:background="#000000"
     android:layout_height="match_parent">
 
     <ImageButton
-        android:id="@+id/title_icon"
+        android:id="@+id/title_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:background="@drawable/add"/>
+        android:background="#00000000"
+        android:src="@drawable/add"/>
 
     <TextView
         android:id="@+id/title_text"
         android:textColor="#ffffffff"
-        android:text="@string/title_activity_pool_list_main"
         android:textSize="22sp"
-        android:layout_toLeftOf="@id/title_icon"
+        android:text="@string/title_activity_pool_list_main"
+        android:layout_toLeftOf="@id/title_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="center"

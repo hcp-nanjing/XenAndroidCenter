@@ -6,6 +6,7 @@
     </style>
 
     <style name="AppTheme" parent="android:Theme">
+        <item name="android:windowTitleSize">42dp</item>
         <item name="android:windowTitleBackgroundStyle">@style/CustomWindowTitleBackground</item>
     </style>
 
