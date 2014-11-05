@@ -18,8 +18,7 @@
         android:hint="@string/prompt_ip"
         android:inputType="textEmailAddress"
         android:maxLines="1"
-        android:singleLine="true"
-        android:text="@string/prompt_ip" />
+        android:singleLine="true" />
 
     <ProgressBar
         android:id="@+id/login_progress"
@@ -48,8 +47,7 @@
                     android:hint="@string/prompt_username"
                     android:inputType="text"
                     android:maxLines="1"
-                    android:singleLine="true"
-                    android:text="@string/prompt_username" />
+                    android:singleLine="true" />
 
                 <EditText
                     android:id="@+id/password"
@@ -61,8 +59,7 @@
                     android:imeOptions="actionUnspecified"
                     android:inputType="textPassword"
                     android:maxLines="1"
-                    android:singleLine="true"
-                    android:text="@string/prompt_password" />
+                    android:singleLine="true" />
 
                 <Button
                     android:id="@+id/sign_in_button"

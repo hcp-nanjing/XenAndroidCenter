@@ -300,9 +300,11 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>{
                 mContext.connect(pool);
             }
             catch (XenAndroidException e){
-                
+                e.printStackTrace();
+                return false;
             }
-            // TODO: register the new account here.
+
+            // Login successful
             return true;
         }
 
