@@ -52,10 +52,14 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>{
     private View mProgressView;
     private View mLoginFormView;
 
+    protected XenAndroidApplication mContext;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        mContext = (XenAndroidApplication)this.getApplication();
 
         // Set up the login form.
         mIpAddressView = (AutoCompleteTextView) findViewById(R.id.ip);
