@@ -16,7 +16,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import java.util.ArrayList;
 
 
@@ -61,6 +60,15 @@ public class PoolListMainActivity extends ListActivity {
 
             }
         });
+
+//        Connection connection;
+//        try {
+//           connection = new Connection(new URL("http://10.158.160.131"));
+//        }
+//        catch (MalformedURLException e) {
+//            System.err.println("IndexOutOfBoundsException: " + e.getMessage());
+//        }
+
     }
 
     private static class PoolListViewHolder {

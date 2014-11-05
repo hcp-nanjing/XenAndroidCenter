@@ -79,6 +79,10 @@
     </content>
     <orderEntry type="jdk" jdkName="Android API 20 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" exported="" name="ws-commons-util-1.0.2" level="project" />
+    <orderEntry type="library" exported="" name="xmlrpc-common-3.1" level="project" />
+    <orderEntry type="library" exported="" name="xenserver-6.2.0-1" level="project" />
+    <orderEntry type="library" exported="" name="xmlrpc-client-3.1" level="project" />
   </component>
 </module>
 
