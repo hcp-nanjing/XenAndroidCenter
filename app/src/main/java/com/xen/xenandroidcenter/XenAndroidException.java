@@ -19,7 +19,7 @@ public class XenAndroidException extends Exception {
     private int error_code;
     private String error_string;
 
-    public void XenAndroidException(int error_code, String error_string) {
+    public XenAndroidException(int error_code, String error_string) {
         this.error_code = error_code;
         this.error_string = error_string;
     }

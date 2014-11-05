@@ -15,11 +15,11 @@
         android:id="@+id/ip"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/prompt_email"
+        android:hint="@string/prompt_ip"
         android:inputType="textEmailAddress"
         android:maxLines="1"
         android:singleLine="true"
-        android:text="IP Address" />
+        android:text="@string/prompt_ip" />
 
     <ProgressBar
         android:id="@+id/login_progress"
@@ -36,7 +36,7 @@
         android:fillViewport="false">
 
             <LinearLayout
-                android:id="@+id/email_login_form"
+                android:id="@+id/pool_login_form"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
@@ -45,11 +45,11 @@
                     android:id="@+id/user"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/prompt_email"
-                    android:inputType="textEmailAddress"
+                    android:hint="@string/prompt_username"
+                    android:inputType="text"
                     android:maxLines="1"
                     android:singleLine="true"
-                    android:text="Username" />
+                    android:text="@string/prompt_username" />
 
                 <EditText
                     android:id="@+id/password"
@@ -62,11 +62,11 @@
                     android:inputType="textPassword"
                     android:maxLines="1"
                     android:singleLine="true"
-                    android:text="Password" />
+                    android:text="@string/prompt_password" />
 
                 <Button
                     android:id="@+id/sign_in_button"
-                    style="?android:textAppearanceSmall"
+                    style="android:textAppearanceSmall"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"

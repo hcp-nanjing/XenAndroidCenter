@@ -42,4 +42,11 @@ public class PoolItem {
         return this.ipAddress;
     }
 
+    public PoolItem (String ip, String host, String user, String pass) {
+        this.ipAddress = ip;
+        this.hostName = host;
+        this.userName = user;
+        this.password = pass;
+    }
+
 }

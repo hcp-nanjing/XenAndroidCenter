@@ -174,7 +174,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>{
     /**
      * Shows the progress UI and hides the login form.
      */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    //@TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     public void showProgress(final boolean show) {
         // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
         // for very easy animations. If available, use these APIs to fade-in
@@ -286,7 +286,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>{
             } catch (InterruptedException e) {
                 return false;
             }
-
+            /*
             for (String credential : DUMMY_CREDENTIALS) {
                 String[] pieces = credential.split(":");
                 if (pieces[0].equals(mUser)) {
@@ -294,7 +294,14 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>{
                     return pieces[1].equals(mPassword);
                 }
             }
-
+            */
+            PoolItem pool = new PoolItem(mIpAddress, null, mUser, mPassword);
+            try {
+                mContext.connect(pool);
+            }
+            catch (XenAndroidException e){
+                
+            }
             // TODO: register the new account here.
             return true;
         }

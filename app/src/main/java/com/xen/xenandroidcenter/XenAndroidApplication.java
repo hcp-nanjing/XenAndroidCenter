@@ -18,7 +18,7 @@ import com.xensource.xenapi.Session;
 public class XenAndroidApplication extends Application {
 
     //<session-uuid, Connection>
-    public static HashMap<String, Connection> sessionDB = new HashMap<String,Session>();
+    public static HashMap<String, Connection> sessionDB = new HashMap<String, Connection>();
 
     /**
      * Return the session UUID if successful, otherwise throw exception
