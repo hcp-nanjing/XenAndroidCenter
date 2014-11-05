@@ -46,6 +46,7 @@ public class PoolListMainActivity extends ListActivity {
         addPoolBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 listAdapter.notifyDataSetChanged();
             }
         });
