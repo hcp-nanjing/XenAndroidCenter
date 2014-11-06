@@ -44,13 +44,18 @@ public class PoolDetailsActivity extends ListActivity {
         //read out the sessionID
         Bundle bundle = this.getIntent().getExtras();
         sessionUUID = bundle.getString(XenAndroidApplication.SESSIONID);
+        Log.d("SESSIONID", sessionUUID);
 
         populateDetailsList();
         poolDetailsListView.setOnItemClickListener( new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(PoolDetailsActivity.this, HostsListMainActivity.class);
-                intent.putExtra(XenAndroidApplication.SESSIONID, sessionUUID);
+                Bundle bundle = new Bundle();
+
+                bundle.putString(XenAndroidApplication.SESSIONID, sessionUUID);
+                intent.putExtras(bundle);
+
                 startActivity(intent);
             }
         });

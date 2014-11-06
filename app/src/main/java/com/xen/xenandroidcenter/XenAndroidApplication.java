@@ -106,6 +106,7 @@ public class XenAndroidApplication extends Application {
             targetServer.setHostName(sessionRef.getThisHost(connection).getNameLabel(connection));
             targetServer.setHosts(ComposeHost(connection));
             targetServer.setVMs(ComposeVMs(connection));
+            targetServer.setSessionUUID(sessionUUID);
             sessionDB.put(sessionUUID, targetServer);
 
             return sessionUUID;
