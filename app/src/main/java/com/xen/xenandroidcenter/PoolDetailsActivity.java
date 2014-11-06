@@ -3,6 +3,7 @@ package com.xen.xenandroidcenter;
 import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -24,14 +26,26 @@ public class PoolDetailsActivity extends ListActivity {
     private ListView poolDetailsListView;
     //private ArrayList<PoolDetailsItem> listItems = new ArrayList<PoolDetailsItem>();
     private CustomAdapter detailsAdapter ;  
-
+    private String sessionUUID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pool_details);
+        //read out the sessionID
+        Bundle bundle = this.getIntent().getExtras();
+        sessionUUID = bundle.getString(XenAndroidApplication.SESSIONID);
 
         populateDetailsList();
+        poolDetailsListView.setOnItemClickListener( new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(PoolDetailsActivity.this, HostsListMainActivity.class);
+                intent.putExtra(XenAndroidApplication.SESSIONID, sessionUUID);
+                startActivity(intent);
+            }
+        });
+
     }
 
 
