@@ -3,5 +3,8 @@
 
     <string name="app_name">XenAndroidCenter</string>
     <string name="title_activity_pool_list_main">XenAndroidCenter</string>
+    <string name="title_activity_vm_list_activity">VM_list_activity</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
 
 </resources>
