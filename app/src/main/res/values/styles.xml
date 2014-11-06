@@ -2,7 +2,7 @@
 
     <!-- Base application theme. -->
     <style name="CustomWindowTitleBackground">
-        <item name="android:background">#FF0000</item>
+        <item name="android:background">#0484d4</item>
     </style>
 
     <style name="AppTheme" parent="android:Theme">

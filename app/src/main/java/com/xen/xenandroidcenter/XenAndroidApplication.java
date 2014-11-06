@@ -43,7 +43,7 @@ public class XenAndroidApplication extends Application {
             Session sessionRef = Session.loginWithPassword(connection, targetServer.getUserName(), targetServer.getPassword(), "1.3");
             String sessionUUID = sessionRef.getUuid(connection);
             targetServer.setSession(sessionRef);
-            targetServer.setHostName(sessionRef.getThisHost(connection).getHostname(connection));
+            targetServer.setHostName(sessionRef.getThisHost(connection).getNameLabel(connection));
 
             sessionDB.put(sessionUUID, targetServer);
 

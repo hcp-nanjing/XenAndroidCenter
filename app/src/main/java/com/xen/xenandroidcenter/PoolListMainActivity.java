@@ -57,6 +57,7 @@ public class PoolListMainActivity extends ListActivity {
         poolListView.setAdapter(listAdapter);
 
         ImageButton addPoolBtn = (ImageButton) findViewById(R.id.title_btn);
+        addPoolBtn.setVisibility(View.VISIBLE);
         addPoolBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
