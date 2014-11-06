@@ -17,5 +17,8 @@
     <string name="action_settings">Settings</string>
     <string name="reboot_host">Reboot</string>
     <string name="shutdown_host">Shutdown</string>
+    <string name="vm_name">Name</string>
+    <string name="vm_desc">Description</string>
+    <string name="vm_os">Operating System</string>
 
 </resources>
