@@ -13,7 +13,6 @@
             android:label="@string/title_activity_pool_list_main" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -26,13 +25,19 @@
             android:name=".VM_list_activity"
             android:label="@string/title_activity_vm_list_activity" >
         </activity>
+
         <activity
             android:name=".PoolDetailsActivity"
             android:label="@string/title_activity_pool_details"
-            android:parentActivityName=".PoolListMainActivity" >
+            android:parentActivityName=".PoolListMainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.xen.xenandroidcenter.PoolListMainActivity" />
+        </activity>
+
+        <activity
+            android:name=".HostsListMainActivity"
+            android:label="@string/title_activity_hosts_list_main" >
         </activity>
     </application>
 

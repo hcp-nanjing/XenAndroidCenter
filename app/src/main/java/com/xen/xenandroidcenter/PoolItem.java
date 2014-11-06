@@ -8,12 +8,21 @@ import java.util.List;
  */
 public class PoolItem {
 
+    private String sessionUUID;
     private String ipAddress;
     private String hostName;
     private String userName;
     private String password;
     private List<VmItem> VMs;
     private List<HostItem> Hosts;
+
+    public String getSessionUUID() {
+        return sessionUUID;
+    }
+
+    public void setSessionUUID(String sessionUUID) {
+        this.sessionUUID = sessionUUID;
+    }
 
     public Session getSession() {
         return session;

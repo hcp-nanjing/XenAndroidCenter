@@ -90,7 +90,7 @@ public class XenAndroidApplication extends Application {
      * @return
      */
     public static String connect(PoolItem targetServer) throws XenAndroidException {
-
+        Connection connection = null;
         try {
 
             Log.d("Connect - Username: ", targetServer.getUserName());
@@ -99,14 +99,13 @@ public class XenAndroidApplication extends Application {
 
             URL url = new URL("http://" + targetServer.getIpAddress());
 
-            final Connection connection = new Connection(url);
+            connection = new Connection(url);
             Session sessionRef = Session.loginWithPassword(connection, targetServer.getUserName(), targetServer.getPassword(), "1.3");
             String sessionUUID = sessionRef.getUuid(connection);
             targetServer.setSession(sessionRef);
             targetServer.setHostName(sessionRef.getThisHost(connection).getNameLabel(connection));
             targetServer.setHosts(ComposeHost(connection));
             targetServer.setVMs(ComposeVMs(connection));
-
             sessionDB.put(sessionUUID, targetServer);
 
             return sessionUUID;
@@ -115,6 +114,10 @@ public class XenAndroidApplication extends Application {
             e.printStackTrace();
             XenAndroidException err = new XenAndroidException(XenAndroidException.ConnectXSError, e.toString());
             throw err;
+        }finally {
+            if(connection != null) {
+                connection.dispose();
+            }
         }
 
     }
