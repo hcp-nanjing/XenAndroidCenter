@@ -9,13 +9,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
+        android:gravity="center_vertical|start|center_horizontal"
         android:src="@drawable/right" />
 
     <ImageView
         android:id="@+id/pool_details_item_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true" 
+        android:layout_alignParentLeft="true"
+        android:gravity="center_vertical|start|center_horizontal"
         android:src="@drawable/host" />
 
     <TextView
@@ -25,7 +27,7 @@
         android:layout_centerInParent="true"
         android:layout_toLeftOf="@id/right_arrow"
         android:layout_toRightOf="@id/pool_details_item_image"
-        android:gravity="start"
+        android:gravity="center_vertical|start|center_horizontal"
         android:text=""
         android:paddingBottom="10dp"
         android:paddingTop="10dp"
