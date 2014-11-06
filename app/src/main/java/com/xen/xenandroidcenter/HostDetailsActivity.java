@@ -1,33 +1,28 @@
 package com.xen.xenandroidcenter;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 
@@ -38,7 +33,7 @@ public class HostDetailsActivity extends ListActivity {
     private HostItem host = null;
     private PopupMenu mOPMenu;
 
-    private ListView hostsListView;
+    private ListView hostAttributesListView;
     private List<ItemValue> listItems = new ArrayList<ItemValue>();
     private HostDetailItemsAdapter listAdapter;
 
@@ -135,13 +130,11 @@ public class HostDetailsActivity extends ListActivity {
         Log.d("SESSIONID", sessionUUID);
         Log.d("hostUUID", hostUUID);
 
-        hostsListView = getListView();
-        TextView emptyView = (TextView)findViewById(android.R.id.empty);
-        hostsListView.setEmptyView(emptyView);
+        hostAttributesListView = getListView();
 
         populateDetailItems();
         listAdapter = new HostDetailItemsAdapter(this, R.layout.host_details_item, listItems);
-        hostsListView.setAdapter(listAdapter);
+        hostAttributesListView.setAdapter(listAdapter);
 
         ImageButton opHostBtn = (ImageButton) findViewById(R.id.title_btn);
         opHostBtn.setVisibility(View.VISIBLE);

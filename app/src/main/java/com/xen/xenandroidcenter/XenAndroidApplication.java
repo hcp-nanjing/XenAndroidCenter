@@ -142,35 +142,71 @@ public class XenAndroidApplication extends Application {
 
     }
 
-    public static void startVM(Connection connection, String UUID) throws Exception
+    public static void startVM(PoolItem targetServer, String UUID) throws XenAndroidException
     {
-        Map<VM, VM.Record> allrecords = VM.getAllRecords(connection);
-        for (VM vm: allrecords.keySet()) {
-            if(vm.getUuid(connection).equals(UUID)) {
-                vm.start(connection, false, false);
-                break;
+        Connection connection = null;
+        try {
+            connection = getConnection(targetServer);
+            Map<VM, VM.Record> allrecords = VM.getAllRecords(connection);
+            for (VM vm : allrecords.keySet()) {
+                if (vm.getUuid(connection).equals(UUID)) {
+                    vm.start(connection, false, false);
+                    break;
+                }
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
+            XenAndroidException err = new XenAndroidException(XenAndroidException.ConnectXSError, e.toString());
+            throw err;
+        }finally {
+            if(connection != null) {
+                connection.dispose();
             }
         }
     }
 
-    public static void stopVM(Connection connection, String UUID) throws Exception
+    public static void stopVM(PoolItem targetServer, String UUID) throws XenAndroidException
     {
-        Map<VM, VM.Record> allrecords = VM.getAllRecords(connection);
-        for (VM vm: allrecords.keySet()) {
-            if(vm.getUuid(connection).equals(UUID)) {
-                vm.cleanShutdown(connection);
-                break;
+        Connection connection = null;
+        try {
+            connection = getConnection(targetServer);
+            Map<VM, VM.Record> allrecords = VM.getAllRecords(connection);
+            for (VM vm: allrecords.keySet()) {
+                if(vm.getUuid(connection).equals(UUID)) {
+                    vm.cleanShutdown(connection);
+                    break;
+                }
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
+            XenAndroidException err = new XenAndroidException(XenAndroidException.ConnectXSError, e.toString());
+            throw err;
+        }finally {
+            if(connection != null) {
+                connection.dispose();
             }
         }
     }
 
-    public static void snapshotVM(Connection connection, String UUID, String snapshotName) throws Exception
+    public static void snapshotVM(PoolItem targetServer, String UUID, String snapshotName) throws XenAndroidException
     {
-        Map<VM, VM.Record> allrecords = VM.getAllRecords(connection);
-        for (VM vm: allrecords.keySet()) {
-            if(vm.getUuid(connection).equals(UUID)) {
-                vm.snapshot(connection, snapshotName);
-                break;
+        Connection connection = null;
+        try {
+            connection = getConnection(targetServer);
+            Map<VM, VM.Record> allrecords = VM.getAllRecords(connection);
+            for (VM vm : allrecords.keySet()) {
+                if (vm.getUuid(connection).equals(UUID)) {
+                    vm.snapshot(connection, snapshotName);
+                    break;
+                }
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
+            XenAndroidException err = new XenAndroidException(XenAndroidException.ConnectXSError, e.toString());
+            throw err;
+        }finally {
+            if(connection != null) {
+                connection.dispose();
             }
         }
     }

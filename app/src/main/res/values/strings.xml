@@ -20,5 +20,8 @@
     <string name="vm_name">Name</string>
     <string name="vm_desc">Description</string>
     <string name="vm_os">Operating System</string>
+    <string name="snapshot_vm">Snapshot VM</string>
+    <string name="start_vm">Start VM</string>
+    <string name="stop_vm">Stop VM</string>
 
 </resources>
