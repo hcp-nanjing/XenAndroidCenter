@@ -1,6 +1,5 @@
 package com.xen.xenandroidcenter;
 
-import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
@@ -53,19 +52,19 @@ public class PoolDetailsActivity extends ListActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent();
                 String item = poolDetailsList.get(i);
-                if (item == "Hosts") {
+                if (item.equals("Hosts")) {
                     intent = new Intent(PoolDetailsActivity.this, HostsListMainActivity.class);
                 }
-                else if (item == "VMs") {
-                    intent = new Intent(PoolDetailsActivity.this, VMListMainActivity.class);
+                else if (item.equals("VMs")) {
+                    intent = new Intent(PoolDetailsActivity.this, VMsListMainActivity.class);
                 }
-                else if (item == "Templates") {
+                else if (item.equals("Templates")) {
                     intent = new Intent(PoolDetailsActivity.this, PoolListMainActivity.class);
                 }
-                else if (item == "Storage") {
+                else if (item.equals("Storage")) {
                     intent = new Intent(PoolDetailsActivity.this, PoolListMainActivity.class);
                 }
-                else if (item == "Network") {
+                else if (item.equals("Network")) {
                     intent = new Intent(PoolDetailsActivity.this, PoolListMainActivity.class);
                 }
 
@@ -78,26 +77,6 @@ public class PoolDetailsActivity extends ListActivity {
             }
         });
 
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.pool_details, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     private void populateDetailsList() {

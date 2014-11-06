@@ -1,29 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout  xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp"
+    android:background="#ffffff"
     android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/vm_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:paddingLeft="10dp"
+        android:layout_centerVertical="true"
+        android:src="@drawable/vm" />
 
     <ImageView
         android:id="@+id/right_arrow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingRight="10dp"
         android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
         android:src="@drawable/right" />
 
-    <TextView
-        android:id="@+id/vm_name"
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_toLeftOf="@id/right_arrow"
-        android:gravity="left"
-        android:text=""
-        android:paddingBottom="10dp"
-        android:paddingTop="10dp"
+    <RelativeLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:clickable="false"
-        android:textColor="#0000FF"
-        android:textSize="18sp" >
-    </TextView>
+        android:layout_toLeftOf="@id/right_arrow"
+        android:layout_toRightOf="@id/left_icon"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        android:layout_centerVertical="true"
+        android:textAlignment="center">
 
+        <TextView
+            android:id="@+id/vm_name"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:text="VM Name"
+            android:textColor="#000000"
+            android:textSize="20sp"
+            android:layout_weight="1"
+            android:textAlignment="viewStart"
+            android:layout_alignParentTop="true"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/vm_ip"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:text="xnj0sdfasd"
+            android:textColor="#000000"
+            android:textSize="18sp"
+            android:layout_weight="1"
+            android:layout_below="@id/vm_name"
+            android:textAlignment="viewStart"
+            android:textStyle="italic"/>
+    </RelativeLayout>
 
 </RelativeLayout>

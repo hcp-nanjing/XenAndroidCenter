@@ -7,6 +7,11 @@ import com.xensource.xenapi.Session;
  */
 public class VmItem {
 
+    public final static String VMSTATUS_STOP = "STOP";
+    public final static String VMSTATUS_RUNNING = "RUNNING";
+    public final static String VMSTATUS_SUSPENDED = "SUSPENDED";
+    public final static String VMSTATUS_PAUSED = "PAUSED";
+
     private String ipAddress;
     private String Name;
     private String UUID;
