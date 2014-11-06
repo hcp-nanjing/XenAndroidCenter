@@ -22,7 +22,7 @@
             android:windowSoftInputMode="adjustResize|stateVisible" >
         </activity>
         <activity
-            android:name=".VM_list_activity"
+            android:name=".VMListMainActivity"
             android:label="@string/title_activity_vm_list_activity" >
         </activity>
 
