@@ -1,6 +1,7 @@
 package com.xen.xenandroidcenter;
 
 import com.xensource.xenapi.Session;
+import java.util.List;
 
 /**
  * Created by zhengc on 11/5/2014.
@@ -11,6 +12,8 @@ public class PoolItem {
     private String hostName;
     private String userName;
     private String password;
+    private List<VmItem> VMs;
+    private List<HostItem> Hosts;
 
     public Session getSession() {
         return session;
@@ -52,6 +55,22 @@ public class PoolItem {
 
     public String getIpAddress() {
         return this.ipAddress;
+    }
+
+    public List<VmItem> getVMs() {
+        return VMs;
+    }
+
+    public void setVMs(List<VmItem> VMs) {
+        this.VMs = VMs;
+    }
+
+    public List<HostItem> getHosts() {
+        return Hosts;
+    }
+
+    public void setHosts(List<HostItem> Hosts) {
+        this.Hosts = Hosts;
     }
 
     public PoolItem (String ip, String host, String user, String pass) {

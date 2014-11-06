@@ -8,19 +8,19 @@ import com.xensource.xenapi.Session;
 public class VmItem {
 
     private String ipAddress;
-    private String vmName;
-    private String vmUUID;
-    private String vmMemSize;
-    private String vmSrInfo;
-    private String vmNicNum;
-    private String vmMac;
-    private String vmOSInfo;
-    private String vmPowerStatus;
-    private String vmUptime;
-    private String vmTemplateName;
+    private String Name;
+    private String UUID;
+    private String MemSize;
+    private String SrInfo;
+    private String NicNum;
+    private String Mac;
+    private String OSInfo;
+    private String PowerStatus;
+    private String Uptime;
+    private String TemplateName;
 
     public String getName() {
-        return vmName;
+        return Name;
     }
 
     public String getIpAddress() {
@@ -28,55 +28,55 @@ public class VmItem {
     }
 
     public String getUUID() {
-        return vmUUID;
+        return UUID;
     }
 
     public String getMemSize() {
-        return vmMemSize;
+        return MemSize;
     }
 
     public String getNicNum() {
-        return vmNicNum;
+        return NicNum;
     }
 
     public String getSrInfo() {
-        return vmSrInfo;
+        return SrInfo;
     }
 
     public String getMac() {
-        return vmMac;
+        return Mac;
     }
 
     public String getOSInfo() {
-        return vmOSInfo;
+        return OSInfo;
     }
 
     public String getPowerStatus() {
-        return vmPowerStatus;
+        return PowerStatus;
     }
 
     public String getUptime() {
-        return vmUptime;
+        return Uptime;
     }
 
     public String getTemplateName() {
-        return vmTemplateName;
+        return TemplateName;
     }
 
 
     public VmItem(String ip, String name, String UUID, String MemSize, String SrInfo, String NicNum,
                   String Mac, String OSInfo, String PowerStatus, String Uptime, String TemplateName) {
         this.ipAddress = ip;
-        this.vmName = name;
-        this.vmUUID = UUID;
-        this.vmMemSize = MemSize;
-        this.vmSrInfo = SrInfo;
-        this.vmNicNum = NicNum;
-        this.vmMac = Mac;
-        this.vmOSInfo = OSInfo;
-        this.vmPowerStatus = PowerStatus;
-        this.vmUptime = Uptime;
-        this.vmTemplateName = TemplateName;
+        this.Name = name;
+        this.UUID = UUID;
+        this.MemSize = MemSize;
+        this.SrInfo = SrInfo;
+        this.NicNum = NicNum;
+        this.Mac = Mac;
+        this.OSInfo = OSInfo;
+        this.PowerStatus = PowerStatus;
+        this.Uptime = Uptime;
+        this.TemplateName = TemplateName;
     }
 }
 
