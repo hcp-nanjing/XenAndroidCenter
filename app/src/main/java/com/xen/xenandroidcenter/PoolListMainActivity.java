@@ -63,7 +63,9 @@ public class PoolListMainActivity extends ListActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 PoolItem item = listItems.get(i);
                 Intent intent = new Intent(PoolListMainActivity.this, PoolDetailsActivity.class);
-                intent.putExtra(mContext.SESSIONID, item.getSessionUUID());
+                Bundle bundle = new Bundle();
+                bundle.putString(mContext.SESSIONID, item.getSessionUUID());
+                intent.putExtras(bundle);
                 startActivity(intent);
             }
         });

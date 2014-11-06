@@ -98,6 +98,11 @@ public class HostsListMainActivity extends ListActivity {
         TextView titleTextView = (TextView) findViewById(R.id.title_text);
         titleTextView.setText(getResources().getString(R.string.title_activity_hosts_list_main));
 
+        //read out the sessionID
+        Bundle bundle = this.getIntent().getExtras();
+        String sessionUUID = bundle.getString(XenAndroidApplication.SESSIONID);
+        Log.d("SESSION-UUID", sessionUUID);
+
         hostsListView = getListView();
         TextView emptyView = (TextView)findViewById(android.R.id.empty);
         hostsListView.setEmptyView(emptyView);
@@ -106,10 +111,6 @@ public class HostsListMainActivity extends ListActivity {
         hostsListView.setAdapter(listAdapter);
 
         this.showProgressDialog("Notice", "Please wait, loading......");
-
-        //read out the sessionID
-        Bundle bundle = this.getIntent().getExtras();
-        String sessionUUID = bundle.getString(XenAndroidApplication.SESSIONID);
 
         LoadHostsAsyncTask loadTask = new LoadHostsAsyncTask(sessionUUID, listItems);
         loadTask.execute((Void) null);
