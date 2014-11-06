@@ -5,6 +5,7 @@ import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -31,6 +32,7 @@ public class HostsListMainActivity extends ListActivity {
     private HostListViewAdapter listAdapter;
 
     protected XenAndroidApplication mContext;
+    private String sessionUUID;
 
     private ProgressDialog progressDialog;
     private void showProgressDialog(String title, String msg) {
@@ -100,7 +102,7 @@ public class HostsListMainActivity extends ListActivity {
 
         //read out the sessionID
         Bundle bundle = this.getIntent().getExtras();
-        String sessionUUID = bundle.getString(XenAndroidApplication.SESSIONID);
+        sessionUUID = bundle.getString(XenAndroidApplication.SESSIONID);
         Log.d("SESSION-UUID", sessionUUID);
 
         hostsListView = getListView();
@@ -119,7 +121,15 @@ public class HostsListMainActivity extends ListActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 HostItem item = listItems.get(i);
-                //
+
+                Intent intent = new Intent(HostsListMainActivity.this, HostDetailsActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString(mContext.SESSIONID, sessionUUID);
+                bundle.putString(mContext.HOSTUUID, item.getUUID());
+
+                intent.putExtras(bundle);
+                startActivity(intent);
+
             }
         });
     }

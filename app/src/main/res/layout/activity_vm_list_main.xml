@@ -14,7 +14,7 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:fastScrollEnabled="true"
-        android:divider="#FF0000"
+        android:divider="#0484d4"
         android:dividerHeight="1dp"
         android:orientation="vertical"
         android:drawSelectorOnTop="false"/>

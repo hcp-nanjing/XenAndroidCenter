@@ -11,5 +11,8 @@
     <string name="title_activity_pool_details_item">Pool Details</string>
     <string name="OK">OK</string>
     <string name="title_activity_vmdetails">VMDetailsActivity</string>
+    <string name="title_activity_host_details">HostDetailsActivity</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
 
 </resources>

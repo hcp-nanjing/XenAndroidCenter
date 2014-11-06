@@ -5,6 +5,7 @@ import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -29,6 +30,7 @@ public class VMsListMainActivity extends ListActivity {
     private ListView hostsListView;
     private List<VmItem> listItems = new ArrayList<VmItem>();
     private VMListViewAdapter listAdapter;
+    private String sessionUUID;
 
     protected XenAndroidApplication mContext;
 
@@ -100,7 +102,7 @@ public class VMsListMainActivity extends ListActivity {
 
         //read out the sessionID
         Bundle bundle = this.getIntent().getExtras();
-        String sessionUUID = bundle.getString(XenAndroidApplication.SESSIONID);
+        sessionUUID = bundle.getString(XenAndroidApplication.SESSIONID);
         Log.d("SESSION-UUID", sessionUUID);
 
         hostsListView = getListView();
@@ -119,7 +121,13 @@ public class VMsListMainActivity extends ListActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 VmItem item = listItems.get(i);
-                //
+
+                Intent intent = new Intent(VMsListMainActivity.this, VMDetailsActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString(mContext.SESSIONID, sessionUUID);
+                bundle.putString(mContext.VMUUID, item.getUUID());
+                intent.putExtras(bundle);
+                startActivity(intent);
             }
         });
     }
@@ -187,9 +195,10 @@ public class VMsListMainActivity extends ListActivity {
             TextView vm_os_view = (TextView) holder.itemView.findViewById(R.id.vm_os);
             ImageView vm_status_image = (ImageView)holder.itemView.findViewById(R.id.vm_status);
 
-            vm_name_view.setText(""+item.getName());
-            vm_os_view.setText(item.getIpAddress());
+            vm_name_view.setText(item.getName());
+            vm_os_view.setText(item.getOSInfo());
             String vmStatus = item.getPowerStatus();
+            Log.d("getView", vmStatus);
 
             if(VmItem.VMSTATUS_STOP.equals(vmStatus)) {
                 vm_status_image.setImageResource(R.drawable.stopped);

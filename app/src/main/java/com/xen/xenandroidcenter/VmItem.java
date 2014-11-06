@@ -8,9 +8,11 @@ import com.xensource.xenapi.Session;
 public class VmItem {
 
     public final static String VMSTATUS_STOP = "Halted";
-    public final static String VMSTATUS_RUNNING = "RUNNING";
-    public final static String VMSTATUS_SUSPENDED = "SUSPENDED";
-    public final static String VMSTATUS_PAUSED = "PAUSED";
+    public final static String VMSTATUS_MIGRATING = "Migrating";
+    public final static String VMSTATUS_PAUSED = "Paused";
+    public final static String VMSTATUS_RUNNING = "Running";
+    public final static String VMSTATUS_SHUTTINGDOWN = "ShuttingDown";
+    public final static String VMSTATUS_SUSPENDED = "Suspended";
 
     private String ipAddress;
     private String Name;

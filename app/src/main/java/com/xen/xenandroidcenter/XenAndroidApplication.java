@@ -55,6 +55,8 @@ public class XenAndroidApplication extends Application {
     public static HashMap<String, PoolItem> sessionDB = new HashMap<String, PoolItem>();
 
     public static final String SESSIONID = "SESSIONID";
+    public static final String HOSTUUID = "HOSTUUID";
+    public static final String VMUUID = "VMUUID";
 
     public static List<HostItem> ComposeHost(Connection connection) throws Exception {
         Map<Host, Host.Record> HostRecords = Host.getAllRecords(connection);

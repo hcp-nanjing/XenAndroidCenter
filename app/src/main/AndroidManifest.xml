@@ -46,6 +46,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.xen.xenandroidcenter.VMListMainActivity" />
         </activity>
+        <activity
+            android:name=".HostDetailsActivity"
+            android:label="@string/title_activity_host_details" >
+        </activity>
     </application>
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
