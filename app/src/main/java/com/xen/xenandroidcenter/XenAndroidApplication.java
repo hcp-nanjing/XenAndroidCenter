@@ -81,7 +81,7 @@ public class XenAndroidApplication extends Application {
         for (VM key: allrecords.keySet()) {
             String osInfo = "NO XENSERVER TOOL";
             VM.Record vmItem = allrecords.get(key);
-            if(vmItem.isATemplate)
+            if(vmItem.isATemplate || vmItem.isControlDomain || vmItem.isASnapshot || vmItem.isSnapshotFromVmpp)
                 continue;
             for (VMGuestMetrics vmGuestM: vmGuestMs.keySet()) {
                 VMGuestMetrics.Record vmGuestMR = vmGuestMs.get(vmGuestM);
