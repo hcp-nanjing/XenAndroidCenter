@@ -25,8 +25,8 @@ import java.util.Arrays;
 public class PoolDetailsActivity extends ListActivity {
 
     private ListView poolDetailsListView;
-    //private ArrayList<PoolDetailsItem> listItems = new ArrayList<PoolDetailsItem>();
-    private CustomAdapter detailsAdapter ;  
+    private CustomAdapter detailsAdapter;
+    private ArrayList<String> poolDetailsList;
     private String sessionUUID;
 
     @Override
@@ -47,10 +47,28 @@ public class PoolDetailsActivity extends ListActivity {
         Log.d("SESSIONID", sessionUUID);
 
         populateDetailsList();
+
         poolDetailsListView.setOnItemClickListener( new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(PoolDetailsActivity.this, HostsListMainActivity.class);
+                Intent intent = new Intent();
+                String item = poolDetailsList.get(i);
+                if (item == "Hosts") {
+                    intent = new Intent(PoolDetailsActivity.this, HostsListMainActivity.class);
+                }
+                else if (item == "VMs") {
+                    intent = new Intent(PoolDetailsActivity.this, VMListMainActivity.class);
+                }
+                else if (item == "Templates") {
+                    intent = new Intent(PoolDetailsActivity.this, PoolListMainActivity.class);
+                }
+                else if (item == "Storage") {
+                    intent = new Intent(PoolDetailsActivity.this, PoolListMainActivity.class);
+                }
+                else if (item == "Network") {
+                    intent = new Intent(PoolDetailsActivity.this, PoolListMainActivity.class);
+                }
+
                 Bundle bundle = new Bundle();
 
                 bundle.putString(XenAndroidApplication.SESSIONID, sessionUUID);
@@ -87,7 +105,7 @@ public class PoolDetailsActivity extends ListActivity {
         //poolDetailsListView = (ListView) findViewById( R.id.poolDetailsList );
   
         String[] poolDetails = new String[] { "Hosts", "VMs", "Templates", "Storage", "Network" };
-        ArrayList<String> poolDetailsList = new ArrayList<String>();
+        poolDetailsList = new ArrayList<String>();
         poolDetailsList.addAll( Arrays.asList(poolDetails) );
       
         // Create ArrayAdapter using the planet list.  
