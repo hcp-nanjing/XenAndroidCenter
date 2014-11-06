@@ -96,7 +96,7 @@ public class HostsListMainActivity extends ListActivity {
 
         //set the window title
         TextView titleTextView = (TextView) findViewById(R.id.title_text);
-        titleTextView.setText(getResources().getString(R.string.title_activity_pool_list_main));
+        titleTextView.setText(getResources().getString(R.string.title_activity_hosts_list_main));
 
         hostsListView = getListView();
         TextView emptyView = (TextView)findViewById(android.R.id.empty);

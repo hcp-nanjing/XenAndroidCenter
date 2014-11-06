@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -31,7 +32,15 @@ public class PoolDetailsActivity extends ListActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //self define window title
+        requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
         setContentView(R.layout.activity_pool_details);
+        getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE,R.layout.cust_activity_title);
+
+        //set the window title
+        TextView titleTextView = (TextView) findViewById(R.id.title_text);
+        titleTextView.setText(getResources().getString(R.string.title_activity_pool_details_item));
+
         //read out the sessionID
         Bundle bundle = this.getIntent().getExtras();
         sessionUUID = bundle.getString(XenAndroidApplication.SESSIONID);
