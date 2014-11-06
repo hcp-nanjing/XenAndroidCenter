@@ -76,11 +76,21 @@ public class XenAndroidApplication extends Application {
 
     public static List<VmItem> ComposeVMs(Connection connection) throws Exception {
         Map<VM, VM.Record> allrecords = VM.getAllRecords(connection);
+        Map<VMGuestMetrics, VMGuestMetrics.Record> vmGuestMs = VMGuestMetrics.getAllRecords(connection);
         List<VmItem> VMs = new ArrayList<VmItem>();
         for (VM key: allrecords.keySet()) {
+            String osInfo = "NO XENSERVER TOOL";
             VM.Record vmItem = allrecords.get(key);
-            VmItem tmp = new VmItem("vmItem.ip", vmItem.nameDescription, vmItem.uuid, vmItem.memoryTarget.toString(), "String SrInfo", "String NicNum",
-                    "String Mac", "String OSInfo", "String PowerStatus", "String Uptime", "String TemplateName");
+            for (VMGuestMetrics vmGuestM: vmGuestMs.keySet()) {
+                VMGuestMetrics.Record vmGuestMR = vmGuestMs.get(vmGuestM);
+                if( vmGuestMR.uuid.equals(vmItem.uuid))
+                {
+                    osInfo = vmGuestMR.osVersion.get("name");
+                }
+            }
+
+            VmItem tmp = new VmItem("vmItem.ip", vmItem.nameDescription, vmItem.uuid, vmItem.memoryTarget.toString(), osInfo, "String NicNum",
+                    "String Mac", vmItem.otherConfig.get("base_template_name"), vmItem.powerState.toString(), "String Uptime", vmItem.otherConfig.get("base_template_name"));
             VMs.add(tmp);
         }
 
@@ -90,6 +100,7 @@ public class XenAndroidApplication extends Application {
      * Return the session UUID if successful, otherwise throw exception
      * @param targetServer
      * @return
+     *
      */
     public static String connect(PoolItem targetServer) throws XenAndroidException {
         Connection connection = null;
@@ -136,7 +147,7 @@ public class XenAndroidApplication extends Application {
     {
         Map<VM, VM.Record> allrecords = VM.getAllRecords(connection);
         for (VM vm: allrecords.keySet()) {
-            if(vm.getUuid(connection) == UUID) {
+            if(vm.getUuid(connection).equals(UUID)) {
                 vm.start(connection, false, false);
                 break;
             }
@@ -147,7 +158,7 @@ public class XenAndroidApplication extends Application {
     {
         Map<VM, VM.Record> allrecords = VM.getAllRecords(connection);
         for (VM vm: allrecords.keySet()) {
-            if(vm.getUuid(connection) == UUID) {
+            if(vm.getUuid(connection).equals(UUID)) {
                 vm.cleanShutdown(connection);
                 break;
             }
@@ -158,7 +169,7 @@ public class XenAndroidApplication extends Application {
     {
         Map<VM, VM.Record> allrecords = VM.getAllRecords(connection);
         for (VM vm: allrecords.keySet()) {
-            if(vm.getUuid(connection) == UUID) {
+            if(vm.getUuid(connection).equals(UUID)) {
                 vm.snapshot(connection, snapshotName);
                 break;
             }
@@ -169,7 +180,7 @@ public class XenAndroidApplication extends Application {
     {
         Map<Host, Host.Record> allrecords = Host.getAllRecords(connection);
         for (Host host: allrecords.keySet()) {
-            if(host.getUuid(connection) == UUID) {
+            if(host.getUuid(connection).equals(UUID)) {
                 host.shutdown(connection);
                 break;
             }
