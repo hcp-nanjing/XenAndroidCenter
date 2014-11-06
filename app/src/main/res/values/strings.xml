@@ -9,10 +9,13 @@
     <string name="title_activity_vm_list_activity">VM List</string>
     <string name="title_activity_hosts_list_main">Host List</string>
     <string name="title_activity_pool_details_item">Pool Details</string>
+    <string name="title_activity_host_details_item">Host Details</string>
     <string name="OK">OK</string>
     <string name="title_activity_vmdetails">VMDetailsActivity</string>
     <string name="title_activity_host_details">HostDetailsActivity</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="reboot_host">Reboot</string>
+    <string name="shutdown_host">Shutdown</string>
 
 </resources>

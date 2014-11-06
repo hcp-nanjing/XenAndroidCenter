@@ -3,6 +3,7 @@ package com.xen.xenandroidcenter;
 import android.app.Application;
 import android.util.Log;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -109,14 +110,8 @@ public class XenAndroidApplication extends Application {
     public static String connect(PoolItem targetServer) throws XenAndroidException {
         Connection connection = null;
         try {
+            connection = getConnection(targetServer);
 
-            Log.d("Connect - Username: ", targetServer.getUserName());
-            Log.d("Connect - password: ", targetServer.getPassword());
-            Log.d("Connect - IP: ", targetServer.getIpAddress());
-
-            URL url = new URL("http://" + targetServer.getIpAddress());
-
-            connection = new Connection(url);
             Session sessionRef = Session.loginWithPassword(connection, targetServer.getUserName(), targetServer.getPassword(), "1.3");
             String sessionUUID = sessionRef.getUuid(connection);
             targetServer.setSession(sessionRef);
@@ -180,26 +175,62 @@ public class XenAndroidApplication extends Application {
         }
     }
 
-    public static void shutdownHost(Connection connection, String UUID) throws Exception
+    public static void shutdownHost(PoolItem targetServer, String UUID) throws XenAndroidException
     {
-        Map<Host, Host.Record> allrecords = Host.getAllRecords(connection);
-        for (Host host: allrecords.keySet()) {
-            if(host.getUuid(connection).equals(UUID)) {
-                host.shutdown(connection);
-                break;
+        Connection connection = null;
+        try {
+            connection = getConnection(targetServer);
+            Map<Host, Host.Record> allrecords = Host.getAllRecords(connection);
+            for (Host host : allrecords.keySet()) {
+                if (host.getUuid(connection).equals(UUID)) {
+                    host.shutdown(connection);
+                    break;
+                }
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
+            XenAndroidException err = new XenAndroidException(XenAndroidException.ConnectXSError, e.toString());
+            throw err;
+        }finally {
+            if(connection != null) {
+                connection.dispose();
             }
         }
     }
 
-    public static void rebootHost(Connection connection, String UUID) throws Exception
+    public static void rebootHost(PoolItem targetServer, String UUID) throws XenAndroidException
     {
-        Map<Host, Host.Record> allrecords = Host.getAllRecords(connection);
-        for (Host host: allrecords.keySet()) {
-            if(host.getUuid(connection).equals(UUID)) {
-                host.reboot(connection);
-                break;
+        Connection connection = null;
+
+        try {
+            connection = getConnection(targetServer);
+            Map<Host, Host.Record> allrecords = Host.getAllRecords(connection);
+            for (Host host : allrecords.keySet()) {
+                if (host.getUuid(connection).equals(UUID)) {
+                    host.reboot(connection);
+                    break;
+                }
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
+            XenAndroidException err = new XenAndroidException(XenAndroidException.ConnectXSError, e.toString());
+            throw err;
+        }finally {
+            if(connection != null) {
+                connection.dispose();
             }
         }
+    }
+
+    private static Connection getConnection(PoolItem targetServer) throws MalformedURLException {
+
+        Log.d("getConnection - Username: ", targetServer.getUserName());
+        Log.d("getConnection - password: ", targetServer.getPassword());
+        Log.d("getConnection - IP: ", targetServer.getIpAddress());
+
+        URL url = new URL("http://" + targetServer.getIpAddress());
+
+        return new Connection(url);
     }
 
 }
