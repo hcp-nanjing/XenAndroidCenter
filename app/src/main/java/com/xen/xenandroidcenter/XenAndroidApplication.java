@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
+import java.util.Set;
+
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -63,8 +65,9 @@ public class XenAndroidApplication extends Application {
             String memUsgae = host.getMemoryOverhead(connection).toString();
 
 
-            HostItem tmp = new HostItem(hostR.address, hostR.hostname, hostR.uuid, memUsgae, hostR.powerOnMode, "ismaster",
+            HostItem tmp = new HostItem(hostR.address, hostR.nameLabel, hostR.uuid, memUsgae, hostR.powerOnMode, "ismaster",
                     hostR.edition, hostR.cpuInfo.toString(), "String Uptime");
+            Log.d("host ", hostR.hostname);
             hostsList.add(tmp);
         }
 
@@ -103,12 +106,19 @@ public class XenAndroidApplication extends Application {
             Session sessionRef = Session.loginWithPassword(connection, targetServer.getUserName(), targetServer.getPassword(), "1.3");
             String sessionUUID = sessionRef.getUuid(connection);
             targetServer.setSession(sessionRef);
-            targetServer.setHostName(sessionRef.getThisHost(connection).getNameLabel(connection));
+            Map<Pool, Pool.Record> poolRecord =  Pool.getAllRecords(connection);
+            if(poolRecord.isEmpty())
+                targetServer.setHostName(sessionRef.getThisHost(connection).getNameLabel(connection));
+            else
+                for (Pool pool: poolRecord.keySet()) {
+                    Pool.Record poolR = poolRecord.get(pool);
+                    targetServer.setHostName(pool.getNameLabel(connection));
+                    break;
+                }
             targetServer.setHosts(ComposeHost(connection));
             targetServer.setVMs(ComposeVMs(connection));
             targetServer.setSessionUUID(sessionUUID);
             sessionDB.put(sessionUUID, targetServer);
-
             return sessionUUID;
 
         }catch (Exception e) {
