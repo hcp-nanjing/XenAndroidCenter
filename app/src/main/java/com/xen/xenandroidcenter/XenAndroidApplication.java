@@ -4,8 +4,10 @@ import android.app.Application;
 import android.util.Log;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -52,9 +54,35 @@ public class XenAndroidApplication extends Application {
 
     public static final String SESSIONID = "SESSIONID";
 
-    public static void ComposeHost(Connection connection) throws Exception {
-        Map<Host, Host.Record> allrecords = Host.getAllRecords(connection);
-        return;
+    public static List<HostItem> ComposeHost(Connection connection) throws Exception {
+        Map<Host, Host.Record> HostRecords = Host.getAllRecords(connection);
+
+        List<HostItem> hostsList = new ArrayList<HostItem>();
+        for (Host host: HostRecords.keySet()) {
+            Host.Record hostR = HostRecords.get(host);
+            String memUsgae = host.getMemoryOverhead(connection).toString();
+
+
+            HostItem tmp = new HostItem(hostR.address, hostR.hostname, hostR.uuid, memUsgae, hostR.powerOnMode, "ismaster",
+                    hostR.edition, hostR.cpuInfo.toString(), "String Uptime");
+            hostsList.add(tmp);
+        }
+
+        return hostsList;
+    }
+
+
+    public static List<VmItem> ComposeVMs(Connection connection) throws Exception {
+        Map<VM, VM.Record> allrecords = VM.getAllRecords(connection);
+        List<VmItem> VMs = new ArrayList<VmItem>();
+        for (VM key: allrecords.keySet()) {
+            VM.Record vmItem = allrecords.get(key);
+            VmItem tmp = new VmItem("vmItem.ip", vmItem.nameDescription, vmItem.uuid, vmItem.memoryTarget.toString(), "String SrInfo", "String NicNum",
+                    "String Mac", "String OSInfo", "String PowerStatus", "String Uptime", "String TemplateName");
+            VMs.add(tmp);
+        }
+
+        return VMs;
     }
     /**
      * Return the session UUID if successful, otherwise throw exception
@@ -76,8 +104,8 @@ public class XenAndroidApplication extends Application {
             String sessionUUID = sessionRef.getUuid(connection);
             targetServer.setSession(sessionRef);
             targetServer.setHostName(sessionRef.getThisHost(connection).getNameLabel(connection));
-
-            ComposeHost(connection);
+            targetServer.setHosts(ComposeHost(connection));
+            targetServer.setVMs(ComposeVMs(connection));
 
             sessionDB.put(sessionUUID, targetServer);
 

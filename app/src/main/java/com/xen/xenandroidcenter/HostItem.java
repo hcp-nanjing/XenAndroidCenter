@@ -54,7 +54,7 @@ public class HostItem {
     }
 
     public HostItem(String ip, String name, String UUID, String MemSize, String MantaineMode, String Role,
-                  String Version, String CPUUsage, String PowerStatus, String Uptime, String TemplateName) {
+                  String Version, String CPUUsage, String Uptime) {
         this.ipAddress = ip;
         this.Name = name;
         this.UUID = UUID;
