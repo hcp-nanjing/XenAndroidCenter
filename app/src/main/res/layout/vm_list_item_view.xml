@@ -30,10 +30,7 @@
         android:layout_height="match_parent"
         android:clickable="false"
         android:layout_toLeftOf="@id/right_arrow"
-        android:layout_toRightOf="@id/left_icon"
-        android:textColor="#000000"
-        android:textSize="20sp"
-        android:layout_centerVertical="true"
+        android:layout_toRightOf="@id/vm_status"
         android:textAlignment="center">
 
         <TextView
@@ -42,19 +39,19 @@
             android:layout_height="fill_parent"
             android:text="VM Name"
             android:textColor="#000000"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:layout_weight="1"
             android:textAlignment="viewStart"
             android:layout_alignParentTop="true"
             android:textStyle="bold"/>
 
         <TextView
-            android:id="@+id/vm_ip"
+            android:id="@+id/vm_os"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:text="xnj0sdfasd"
             android:textColor="#000000"
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:layout_weight="1"
             android:layout_below="@id/vm_name"
             android:textAlignment="viewStart"

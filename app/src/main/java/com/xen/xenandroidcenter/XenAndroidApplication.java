@@ -91,7 +91,7 @@ public class XenAndroidApplication extends Application {
                 }
             }
 
-            VmItem tmp = new VmItem("vmItem.ip", vmItem.nameDescription, vmItem.uuid, vmItem.memoryTarget.toString(), osInfo, "String NicNum",
+            VmItem tmp = new VmItem("vmItem.ip", vmItem.nameLabel, vmItem.uuid, vmItem.memoryTarget.toString(), osInfo, "String NicNum",
                     "String Mac", vmItem.otherConfig.get("base_template_name"), vmItem.powerState.toString(), "String Uptime", vmItem.otherConfig.get("base_template_name"));
             VMs.add(tmp);
         }

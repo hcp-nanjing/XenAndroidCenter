@@ -184,21 +184,21 @@ public class VMsListMainActivity extends ListActivity {
             Log.d("getView", item.getName());
             holder.item = item;
             TextView vm_name_view = (TextView) holder.itemView.findViewById(R.id.vm_name);
-            TextView vm_ip_view = (TextView) holder.itemView.findViewById(R.id.vm_ip);
+            TextView vm_os_view = (TextView) holder.itemView.findViewById(R.id.vm_os);
             ImageView vm_status_image = (ImageView)holder.itemView.findViewById(R.id.vm_status);
 
             vm_name_view.setText(""+item.getName());
-            vm_ip_view.setText(item.getIpAddress());
+            vm_os_view.setText(item.getIpAddress());
             String vmStatus = item.getPowerStatus();
 
             if(VmItem.VMSTATUS_STOP.equals(vmStatus)) {
-                vm_status_image.setImageResource(R.drawable.vm);
+                vm_status_image.setImageResource(R.drawable.stopped);
             } else if(VmItem.VMSTATUS_PAUSED.equals(vmStatus)) {
-                vm_status_image.setImageResource(R.drawable.vm);
+                vm_status_image.setImageResource(R.drawable.paused);
             } else if(VmItem.VMSTATUS_RUNNING.equals(vmStatus)) {
-                vm_status_image.setImageResource(R.drawable.vm);
+                vm_status_image.setImageResource(R.drawable.running);
             } else if(VmItem.VMSTATUS_SUSPENDED.equals(vmStatus)) {
-                vm_status_image.setImageResource(R.drawable.vm);
+                vm_status_image.setImageResource(R.drawable.suspended);
             }
 
             return convertView;
