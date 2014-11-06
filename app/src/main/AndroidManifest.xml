@@ -26,6 +26,10 @@
             android:name=".VM_list_activity"
             android:label="@string/title_activity_vm_list_activity" >
         </activity>
+        <activity
+            android:name=".HostsListMainActivity"
+            android:label="@string/title_activity_hosts_list_main" >
+        </activity>
     </application>
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
