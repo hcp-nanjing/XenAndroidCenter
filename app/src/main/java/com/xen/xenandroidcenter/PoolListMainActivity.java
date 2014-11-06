@@ -5,9 +5,6 @@ import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,14 +12,9 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-
-import com.xensource.xenapi.Connection;
-import com.xensource.xenapi.Session;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +23,7 @@ import java.util.List;
 public class PoolListMainActivity extends ListActivity {
     private ListView poolListView;
     private ArrayList<PoolItem> listItems = new ArrayList<PoolItem>();
-    private ListViewAdapter listAdapter;
+    private PoolListViewAdapter listAdapter;
 
     protected XenAndroidApplication mContext;
 
@@ -53,7 +45,7 @@ public class PoolListMainActivity extends ListActivity {
         TextView emptyView = (TextView)findViewById(android.R.id.empty);
         poolListView.setEmptyView(emptyView);
 
-        listAdapter = new ListViewAdapter(this, R.layout.pool_list_item_view, listItems);
+        listAdapter = new PoolListViewAdapter(this, R.layout.pool_list_item_view, listItems);
         poolListView.setAdapter(listAdapter);
 
         ImageButton addPoolBtn = (ImageButton) findViewById(R.id.title_btn);
@@ -70,7 +62,9 @@ public class PoolListMainActivity extends ListActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 PoolItem item = listItems.get(i);
-                //
+                Intent intent = new Intent(PoolListMainActivity.this, PoolDetailsActivity.class);
+                intent.putExtra(mContext.SESSIONID, item.getSessionUUID());
+                startActivity(intent);
             }
         });
     }
@@ -89,12 +83,12 @@ public class PoolListMainActivity extends ListActivity {
         PoolItem item;
     };
 
-    class ListViewAdapter extends ArrayAdapter<PoolItem> {
+    class PoolListViewAdapter extends ArrayAdapter<PoolItem> {
         private Context mContext;
         int layoutResId;
         private List<PoolItem> listItems;
 
-        public ListViewAdapter(Context context, int resID, List<PoolItem> listItems) {
+        public PoolListViewAdapter(Context context, int resID, List<PoolItem> listItems) {
             super(context, resID, listItems);
             this.layoutResId = resID;
             this.mContext = context;

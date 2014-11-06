@@ -5,7 +5,6 @@ import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,7 +16,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -29,10 +28,7 @@ import java.util.List;
 public class HostsListMainActivity extends ListActivity {
     private ListView hostsListView;
     private ArrayList<HostItem> listItems = new ArrayList<HostItem>();
-    private ListViewAdapter listAdapter;
-    private String sessionUUID;
-    private List<HostItem> hostsList;
-
+    private HostListViewAdapter listAdapter;
 
     protected XenAndroidApplication mContext;
 
@@ -62,6 +58,7 @@ public class HostsListMainActivity extends ListActivity {
     }
 
 
+    private final static int LOADSUCCESSMESSAGE = 0x00000001;
     Handler msgHandler = new MHandler(this);
     static class MHandler extends Handler {
         WeakReference<HostsListMainActivity> mActivity;
@@ -76,11 +73,8 @@ public class HostsListMainActivity extends ListActivity {
             theActivity.hideProgressBox();
 
             switch (msg.what) {
-                case DATALOADEDMSG:
-                    break;
-
-                case DATALOADERRMSG:
-                    theActivity.InfoMessageBox("Error", "Network Error Happened during loading.");
+                case LOADSUCCESSMESSAGE:
+                    theActivity.refleshAdaptorData();
                     break;
 
                 default:
@@ -108,17 +102,17 @@ public class HostsListMainActivity extends ListActivity {
         TextView emptyView = (TextView)findViewById(android.R.id.empty);
         hostsListView.setEmptyView(emptyView);
 
-        listAdapter = new ListViewAdapter(this, R.layout.pool_list_item_view, listItems);
+        listAdapter = new HostListViewAdapter(this, R.layout.host_list_item_view, listItems);
         hostsListView.setAdapter(listAdapter);
 
         this.showProgressDialog("Notice", "Please wait, loading......");
 
         //read out the sessionID
         Bundle bundle = this.getIntent().getExtras();
-        this.sessionUUID = bundle.getString(XenAndroidApplication.SESSIONID);
+        String sessionUUID = bundle.getString(XenAndroidApplication.SESSIONID);
 
-        LoadHostsAsyncTask loadTask = new LoadHostsAsyncTask(sessionUUID, hostsList);
-        loadTask.execute((Void)null);
+        LoadHostsAsyncTask loadTask = new LoadHostsAsyncTask(sessionUUID, listItems);
+        loadTask.execute((Void) null);
 
         hostsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -131,10 +125,7 @@ public class HostsListMainActivity extends ListActivity {
 
     @Override
     protected void onResume() {
-
         Log.d("onResume", "onResume()");
-        refleshAdaptorData();
-
         super.onResume();
     }
 
@@ -143,12 +134,12 @@ public class HostsListMainActivity extends ListActivity {
         HostItem item;
     };
 
-    class ListViewAdapter extends ArrayAdapter<HostItem> {
+    class HostListViewAdapter extends ArrayAdapter<HostItem> {
         private Context mContext;
         int layoutResId;
         private List<HostItem> listItems;
 
-        public ListViewAdapter(Context context, int resID, List<HostItem> listItems) {
+        public HostListViewAdapter(Context context, int resID, List<HostItem> listItems) {
             super(context, resID, listItems);
             this.layoutResId = resID;
             this.mContext = context;
@@ -191,45 +182,43 @@ public class HostsListMainActivity extends ListActivity {
                 holder = (PoolListViewHolder) convertView.getTag();
             }
 
-            Log.d("getView", item.getHostName());
+            Log.d("getView", item.getName());
             holder.item = item;
-            TextView pool_name_view = (TextView) holder.itemView.findViewById(R.id.pool_name);
-            pool_name_view.setText(item.getHostName());
+            TextView host_name_view = (TextView) holder.itemView.findViewById(R.id.host_name);
+            TextView host_desc_view = (TextView) holder.itemView.findViewById(R.id.host_description);
+            ImageView left_icon = (ImageView)holder.itemView.findViewById(R.id.left_icon);
+
+            host_name_view.setText(item.getName());
+            if(listItems.size() > 1) {
+                left_icon.setImageResource(R.drawable.poolicon);
+            }
+
             return convertView;
         }
     };
 
     public void refleshAdaptorData() {
-        listItems.clear();
-        for (String key : mContext.sessionDB.keySet()) {
-            Log.d("refleshAdaptorData", key);
-            HostItem HostItem = mContext.sessionDB.get(key);
-            listItems.add(HostItem);
-            listAdapter.notifyDataSetChanged();
-        }
+        listAdapter.notifyDataSetChanged();
     }
 
     class LoadHostsAsyncTask extends AsyncTask<Void, Void, Boolean> {
-        private final String sessID;
-        private final List<HostItem> hostsList;
+        private String sessID;
+        private List<HostItem> hostsList;
 
-        LoadHostsAsyncTask(String sessID, List<HostItem> hostsList) {
+        LoadHostsAsyncTask(String sessID,  ArrayList<HostItem> hostsList) {
             this.sessID = sessID;
             this.hostsList = hostsList;
         }
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            try {
-                this.poolItem = mContext.sessionDB.get(this.sessID);
 
-            }
-            catch (XenAndroidException e){
-                e.printStackTrace();
-                return false;
-            }
+            hostsList = mContext.sessionDB.get(this.sessID).getHosts();
 
-            // Login successful
+            Message msg = new Message();
+            msg.what = HostsListMainActivity.LOADSUCCESSMESSAGE;
+            msgHandler.sendMessage(msg);
+
             return true;
         }
 

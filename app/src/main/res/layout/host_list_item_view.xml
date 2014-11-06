@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp"
+    android:background="#ffffff"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/left_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:paddingLeft="10dp"
+        android:layout_centerVertical="true"
+        android:src="@drawable/host" />
+
+    <ImageView
+        android:id="@+id/right_arrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingRight="10dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/right" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="false"
+        android:layout_toLeftOf="@id/right_arrow"
+        android:layout_toRightOf="@id/left_icon"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        android:layout_centerVertical="true"
+        android:textAlignment="center">
+
+        <TextView
+            android:id="@+id/host_name"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:text="xnj0sdfasd"
+            android:textColor="#000000"
+            android:textSize="20sp"
+            android:layout_weight="1"
+            android:textAlignment="viewStart"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/host_description"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:text="xnj0sdfasd"
+            android:textColor="#000000"
+            android:textSize="18sp"
+            android:layout_weight="1"
+            android:textAlignment="viewStart"
+            android:textStyle="italic"/>
+    </LinearLayout>
+
+</RelativeLayout>
