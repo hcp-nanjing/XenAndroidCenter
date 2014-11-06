@@ -26,6 +26,14 @@
             android:name=".VM_list_activity"
             android:label="@string/title_activity_vm_list_activity" >
         </activity>
+        <activity
+            android:name=".PoolDetailsActivity"
+            android:label="@string/title_activity_pool_details"
+            android:parentActivityName=".PoolListMainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.xen.xenandroidcenter.PoolListMainActivity" />
+        </activity>
     </application>
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
