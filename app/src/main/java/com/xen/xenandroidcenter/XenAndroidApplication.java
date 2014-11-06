@@ -74,7 +74,6 @@ public class XenAndroidApplication extends Application {
         return hostsList;
     }
 
-
     public static List<VmItem> ComposeVMs(Connection connection) throws Exception {
         Map<VM, VM.Record> allrecords = VM.getAllRecords(connection);
         List<VmItem> VMs = new ArrayList<VmItem>();
@@ -131,6 +130,50 @@ public class XenAndroidApplication extends Application {
             }
         }
 
+    }
+
+    public static void startVM(Connection connection, String UUID) throws Exception
+    {
+        Map<VM, VM.Record> allrecords = VM.getAllRecords(connection);
+        for (VM vm: allrecords.keySet()) {
+            if(vm.getUuid(connection) == UUID) {
+                vm.start(connection, false, false);
+                break;
+            }
+        }
+    }
+
+    public static void stopVM(Connection connection, String UUID) throws Exception
+    {
+        Map<VM, VM.Record> allrecords = VM.getAllRecords(connection);
+        for (VM vm: allrecords.keySet()) {
+            if(vm.getUuid(connection) == UUID) {
+                vm.cleanShutdown(connection);
+                break;
+            }
+        }
+    }
+
+    public static void snapshotVM(Connection connection, String UUID, String snapshotName) throws Exception
+    {
+        Map<VM, VM.Record> allrecords = VM.getAllRecords(connection);
+        for (VM vm: allrecords.keySet()) {
+            if(vm.getUuid(connection) == UUID) {
+                vm.snapshot(connection, snapshotName);
+                break;
+            }
+        }
+    }
+
+    public static void shutdownHost(Connection connection, String UUID) throws Exception
+    {
+        Map<Host, Host.Record> allrecords = Host.getAllRecords(connection);
+        for (Host host: allrecords.keySet()) {
+            if(host.getUuid(connection) == UUID) {
+                host.shutdown(connection);
+                break;
+            }
+        }
     }
 
 }
