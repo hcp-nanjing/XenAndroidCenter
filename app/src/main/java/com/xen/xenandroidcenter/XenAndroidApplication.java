@@ -189,4 +189,15 @@ public class XenAndroidApplication extends Application {
         }
     }
 
+    public static void rebootHost(Connection connection, String UUID) throws Exception
+    {
+        Map<Host, Host.Record> allrecords = Host.getAllRecords(connection);
+        for (Host host: allrecords.keySet()) {
+            if(host.getUuid(connection).equals(UUID)) {
+                host.reboot(connection);
+                break;
+            }
+        }
+    }
+
 }
