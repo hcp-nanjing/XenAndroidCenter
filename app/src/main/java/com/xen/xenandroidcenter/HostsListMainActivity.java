@@ -27,7 +27,7 @@ import java.util.List;
 
 public class HostsListMainActivity extends ListActivity {
     private ListView hostsListView;
-    private ArrayList<HostItem> listItems = new ArrayList<HostItem>();
+    private List<HostItem> listItems = new ArrayList<HostItem>();
     private HostListViewAdapter listAdapter;
 
     protected XenAndroidApplication mContext;
@@ -138,13 +138,11 @@ public class HostsListMainActivity extends ListActivity {
     class HostListViewAdapter extends ArrayAdapter<HostItem> {
         private Context mContext;
         int layoutResId;
-        private List<HostItem> listItems;
 
         public HostListViewAdapter(Context context, int resID, List<HostItem> listItems) {
             super(context, resID, listItems);
             this.layoutResId = resID;
             this.mContext = context;
-            this.listItems = listItems;
         }
 
         @Override
@@ -199,22 +197,23 @@ public class HostsListMainActivity extends ListActivity {
     };
 
     public void refleshAdaptorData() {
+        Log.d("DISPLAY", listItems.size() + "");
         listAdapter.notifyDataSetChanged();
     }
 
     class LoadHostsAsyncTask extends AsyncTask<Void, Void, Boolean> {
         private String sessID;
-        private List<HostItem> hostsList;
 
-        LoadHostsAsyncTask(String sessID,  ArrayList<HostItem> hostsList) {
+        LoadHostsAsyncTask(String sessID,  List<HostItem> hostsList) {
             this.sessID = sessID;
-            this.hostsList = hostsList;
         }
 
         @Override
         protected Boolean doInBackground(Void... params) {
 
-            hostsList = mContext.sessionDB.get(this.sessID).getHosts();
+            listItems = mContext.sessionDB.get(this.sessID).getHosts();
+
+            Log.d("HOSTSLIST", listItems.size() + "");
 
             Message msg = new Message();
             msg.what = HostsListMainActivity.LOADSUCCESSMESSAGE;
