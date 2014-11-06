@@ -107,7 +107,7 @@ public class VMsListMainActivity extends ListActivity {
         TextView emptyView = (TextView)findViewById(android.R.id.empty);
         hostsListView.setEmptyView(emptyView);
 
-        listAdapter = new VMListViewAdapter(this, R.layout.host_list_item_view, listItems);
+        listAdapter = new VMListViewAdapter(this, R.layout.vm_list_item_view, listItems);
         hostsListView.setAdapter(listAdapter);
 
         this.showProgressDialog("Notice", "Please wait, loading......");
