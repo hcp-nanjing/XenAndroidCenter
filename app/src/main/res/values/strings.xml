@@ -30,7 +30,7 @@
     <string name="vm_uptime">Up Time: </string>
     <string name="host_name">Host Name: </string>
     <string name="host_uuid">UUID: </string>
-    <string name="host_cpu">CPU Usage: </string>
+    <string name="host_cpu">CPU Info: </string>
     <string name="host_status">Host Status: </string>
     <string name="host_os">OS: </string>
     <string name="host_memory">Memory: </string>
