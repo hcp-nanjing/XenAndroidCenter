@@ -77,8 +77,10 @@ public class XenAndroidApplication extends Application {
             String osInfo = "No XenServer Tool";
             String srInfo = "No XenServer Tool";
             String ip = "No XenServer Tool";
-            String mac = "NO XENSERVER TOOL";
+            String mac = "No XenServer Tool";
             Long nicnum = 0L;
+            String mac = "No XenServer Tool";
+
             VM.Record vmItem = allrecords.get(key);
 
             if(vmItem.isATemplate || vmItem.isControlDomain || vmItem.isASnapshot || vmItem.isSnapshotFromVmpp) {
@@ -92,6 +94,7 @@ public class XenAndroidApplication extends Application {
                     osInfo = vmGuestMR.osVersion.get("name");
                 if(vmGuestMR.networks != null && !vmGuestMR.networks.isEmpty())
                     ip = vmGuestMR.networks.get("0/ip");
+
                 for (VIF vif : key.getVIFs(connection)) {
                     mac = vif.getMAC(connection).toString();
                     nicnum = nicnum + 1L;
@@ -107,12 +110,14 @@ public class XenAndroidApplication extends Application {
                         break;
                     }
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            catch (Exception e)
-            {}
+
             Long mem = vmItem.memoryTarget/1024/1024;
             VmItem tmpVM = new VmItem(ip, vmItem.nameLabel, vmItem.uuid, mem.toString() + "MB", srInfo, nicnum.toString(),
                     mac, osInfo, vmItem.powerState.toString(), "String Uptime", vmItem.otherConfig.get("base_template_name"));
+
             VMs.put(tmpVM.getUUID(), tmpVM);
         }
 
@@ -151,7 +156,7 @@ public class XenAndroidApplication extends Application {
             targetServer.setConnection(connection);
             sessionDB.put(sessionUUID, targetServer);
 
-            new EventMonitorAsyncTask(targetServer).execute((Void)null);
+            //new EventMonitorAsyncTask(targetServer).execute((Void)null);
 
             return sessionUUID;
 

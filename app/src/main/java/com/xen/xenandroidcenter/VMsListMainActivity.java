@@ -175,8 +175,8 @@ public class VMsListMainActivity extends ListActivity {
         public View getView(final int position, View convertView, ViewGroup parent) {
             Log.d("getView", "getView()");
             PoolListViewHolder holder;
-            VmItem item = getItem(position);
-            if(item == null) {
+            VmItem vmItem = getItem(position);
+            if(vmItem == null) {
                 Log.d("getView", "return null");
                 return null;
             }
@@ -190,16 +190,16 @@ public class VMsListMainActivity extends ListActivity {
                 holder = (PoolListViewHolder) convertView.getTag();
             }
 
-            Log.d("getView", item.getName());
-            holder.item = item;
+            Log.d("getView", vmItem.getName());
+            holder.item = vmItem;
             TextView vm_name_view = (TextView) holder.itemView.findViewById(R.id.vm_name);
             TextView vm_os_view = (TextView) holder.itemView.findViewById(R.id.vm_os);
             ImageView vm_status_image = (ImageView)holder.itemView.findViewById(R.id.vm_status);
 
-            vm_name_view.setText(item.getName());
-            vm_os_view.setText(item.getOSInfo());
-            Log.d("getView - OS", item.getOSInfo());
-            String vmStatus = item.getPowerStatus();
+            vm_name_view.setText(vmItem.getName());
+            vm_os_view.setText(vmItem.getOSInfo());
+            Log.d("getView - OS", vmItem.getOSInfo());
+            String vmStatus = vmItem.getPowerStatus();
             Log.d("getView", vmStatus);
 
             if(VmItem.VMSTATUS_STOP.equals(vmStatus)) {
