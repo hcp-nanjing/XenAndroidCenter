@@ -69,7 +69,7 @@ public class XenAndroidApplication extends Application {
                 if (vmGuestMR.osVersion != null && vmGuestMR.osVersion.containsKey("name"))
                     osInfo = vmGuestMR.osVersion.get("name");
                 if(vmGuestMR.networks != null && !vmGuestMR.networks.isEmpty())
-                    ip = vmGuestMR.networks.values().toString();
+                    ip = vmGuestMR.networks.get("0/ip");
             }
             catch (Exception e)
             {}
