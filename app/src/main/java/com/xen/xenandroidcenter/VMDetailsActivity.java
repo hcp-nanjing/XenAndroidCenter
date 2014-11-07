@@ -236,15 +236,15 @@ public class VMDetailsActivity extends ListActivity {
 
             {
                 ItemValue itm = new ItemValue();
-                itm.setItemTitle(getResources().getString(R.string.vm_nic));
-                itm.setItemValue(vm.getNicNum());
+                itm.setItemTitle(getResources().getString(R.string.vm_mac));
+                itm.setItemValue(vm.getMac());
                 listItems.add(itm);
             }
 
             {
                 ItemValue itm = new ItemValue();
-                itm.setItemTitle(getResources().getString(R.string.vm_mac));
-                itm.setItemValue(vm.getMac());
+                itm.setItemTitle(getResources().getString(R.string.vm_nic));
+                itm.setItemValue(vm.getNicNum());
                 listItems.add(itm);
             }
 
@@ -254,13 +254,14 @@ public class VMDetailsActivity extends ListActivity {
                 itm.setItemValue(vm.getTemplateName());
                 listItems.add(itm);
             }
-
+            /*
             {
                 ItemValue itm = new ItemValue();
                 itm.setItemTitle(getResources().getString(R.string.vm_uptime));
                 itm.setItemValue(vm.getUptime());
                 listItems.add(itm);
             }
+            */
         }
 
     }

@@ -32,7 +32,6 @@ import java.util.List;
 
 /**
  * A login screen that offers login via username/password.
-
  */
 public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>{
 

@@ -24,7 +24,7 @@
     <string name="vm_memory">Memory: </string>
     <string name="vm_sr">SR: </string>
     <string name="vm_ip">IP Address: </string>
-    <string name="vm_nic">NIC: </string>
+    <string name="vm_nic">NIC Count: </string>
     <string name="vm_mac">MAC: </string>
     <string name="vm_template">Template: </string>
     <string name="vm_uptime">Up Time: </string>

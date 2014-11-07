@@ -27,6 +27,7 @@ public class PoolDetailsActivity extends ListActivity {
     private CustomAdapter detailsAdapter;
     private ArrayList<String> poolDetailsList;
     private String sessionUUID;
+    protected XenAndroidApplication mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +36,7 @@ public class PoolDetailsActivity extends ListActivity {
         requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
         setContentView(R.layout.activity_pool_details);
         getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE,R.layout.cust_activity_title);
-
+        mContext = (XenAndroidApplication)this.getApplication();
         //set the window title
         TextView titleTextView = (TextView) findViewById(R.id.title_text);
         titleTextView.setText(getResources().getString(R.string.title_activity_pool_details_item));
@@ -115,21 +116,29 @@ public class PoolDetailsActivity extends ListActivity {
             TextView itemName = (TextView) convertView.findViewById(R.id.pool_details_item_text);
             // Populate the data into the template view using the data object
             itemName.setText(item);
+
+            TextView itemCount = (TextView) convertView.findViewById(R.id.pool_details_item_count);
+
             ImageView image = (ImageView) convertView.findViewById(R.id.pool_details_item_image);
             if (item.equals(getResources().getString(R.string.hosts))) {
                 image.setImageResource(R.drawable.host);
+                itemCount.setText("count = " + mContext.sessionDB.get(sessionUUID).getHosts().size());
             }
             else if (item.equals(getResources().getString(R.string.vms))) {
                 image.setImageResource(R.drawable.vm);
+                itemCount.setText("count = " + mContext.sessionDB.get(sessionUUID).getVMs().size());
             }
             else if (item.equals(getResources().getString(R.string.templates))) {
                 image.setImageResource(R.drawable.template);
+                itemCount.setText("count = 23");
             }
             else if (item.equals(getResources().getString(R.string.storage))) {
                 image.setImageResource(R.drawable.storage);
+                itemCount.setText("count = 8");
             }
             else if (item.equals(getResources().getString(R.string.network))) {
                 image.setImageResource(R.drawable.network);
+                itemCount.setText("count = 4");
             }
             // Return the completed view to render on screen
             return convertView;

@@ -187,8 +187,8 @@ public class HostDetailsActivity extends ListActivity {
 
             {
                 ItemValue itm = new ItemValue();
-                itm.setItemTitle(getResources().getString(R.string.host_cpu));
-                itm.setItemValue(host.getCPUUsage());
+                itm.setItemTitle(getResources().getString(R.string.host_version));
+                itm.setItemValue(host.getVersion());
                 listItems.add(itm);
             }
 
@@ -208,11 +208,11 @@ public class HostDetailsActivity extends ListActivity {
 
             {
                 ItemValue itm = new ItemValue();
-                itm.setItemTitle(getResources().getString(R.string.host_version));
-                itm.setItemValue(host.getVersion());
+                itm.setItemTitle(getResources().getString(R.string.host_cpu));
+                itm.setItemValue(host.getCPUUsage());
                 listItems.add(itm);
             }
-
+            /*
             {
                 ItemValue itm = new ItemValue();
                 itm.setItemTitle(getResources().getString(R.string.host_maintenance));
@@ -233,6 +233,8 @@ public class HostDetailsActivity extends ListActivity {
                 itm.setItemValue(host.getUptime());
                 listItems.add(itm);
             }
+            */
+
         }
 
     }
