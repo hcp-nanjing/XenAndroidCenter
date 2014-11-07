@@ -79,7 +79,6 @@ public class XenAndroidApplication extends Application {
             String ip = "No XenServer Tool";
             String mac = "No XenServer Tool";
             Long nicnum = 0L;
-            String mac = "No XenServer Tool";
 
             VM.Record vmItem = allrecords.get(key);
 
@@ -110,6 +109,7 @@ public class XenAndroidApplication extends Application {
                         break;
                     }
                 }
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
