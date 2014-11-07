@@ -52,19 +52,19 @@ public class PoolDetailsActivity extends ListActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent();
                 String item = poolDetailsList.get(i);
-                if (item.equals("Hosts")) {
+                if (item.equals(getResources().getString(R.string.hosts))) {
                     intent = new Intent(PoolDetailsActivity.this, HostsListMainActivity.class);
                 }
-                else if (item.equals("VMs")) {
+                else if (item.equals(getResources().getString(R.string.vms))) {
                     intent = new Intent(PoolDetailsActivity.this, VMsListMainActivity.class);
                 }
-                else if (item.equals("Templates")) {
+                else if (item.equals(getResources().getString(R.string.templates))) {
                     intent = new Intent(PoolDetailsActivity.this, PoolListMainActivity.class);
                 }
-                else if (item.equals("Storage")) {
+                else if (item.equals(getResources().getString(R.string.storage))) {
                     intent = new Intent(PoolDetailsActivity.this, PoolListMainActivity.class);
                 }
-                else if (item.equals("Network")) {
+                else if (item.equals(getResources().getString(R.string.network))) {
                     intent = new Intent(PoolDetailsActivity.this, PoolListMainActivity.class);
                 }
 
@@ -83,7 +83,11 @@ public class PoolDetailsActivity extends ListActivity {
         poolDetailsListView = getListView();
         //poolDetailsListView = (ListView) findViewById( R.id.poolDetailsList );
   
-        String[] poolDetails = new String[] { "Hosts", "VMs", "Templates", "Storage", "Network" };
+        String[] poolDetails = new String[] { getResources().getString(R.string.hosts),
+                getResources().getString(R.string.vms),
+                getResources().getString(R.string.templates),
+                getResources().getString(R.string.storage),
+                getResources().getString(R.string.network) };
         poolDetailsList = new ArrayList<String>();
         poolDetailsList.addAll( Arrays.asList(poolDetails) );
       
@@ -112,19 +116,19 @@ public class PoolDetailsActivity extends ListActivity {
             // Populate the data into the template view using the data object
             itemName.setText(item);
             ImageView image = (ImageView) convertView.findViewById(R.id.pool_details_item_image);
-            if (item == "Hosts") {
+            if (item.equals(getResources().getString(R.string.hosts))) {
                 image.setImageResource(R.drawable.host);
             }
-            else if (item == "VMs") {
+            else if (item.equals(getResources().getString(R.string.vms))) {
                 image.setImageResource(R.drawable.vm);
             }
-            else if (item == "Templates") {
+            else if (item.equals(getResources().getString(R.string.templates))) {
                 image.setImageResource(R.drawable.template);
             }
-            else if (item == "Storage") {
+            else if (item.equals(getResources().getString(R.string.storage))) {
                 image.setImageResource(R.drawable.storage);
             }
-            else if (item == "Network") {
+            else if (item.equals(getResources().getString(R.string.network))) {
                 image.setImageResource(R.drawable.network);
             }
             // Return the completed view to render on screen

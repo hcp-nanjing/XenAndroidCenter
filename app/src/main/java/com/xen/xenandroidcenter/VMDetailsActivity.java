@@ -177,28 +177,77 @@ public class VMDetailsActivity extends ListActivity {
         if(vm != null) {
             {
                 ItemValue itm = new ItemValue();
-                itm.setItemTitle("VM Name: ");
+                itm.setItemTitle(getResources().getString(R.string.vm_name));
                 itm.setItemValue(vm.getName());
                 listItems.add(itm);
             }
 
             {
                 ItemValue itm = new ItemValue();
-                itm.setItemTitle("VM Status: ");
+                itm.setItemTitle(getResources().getString(R.string.vm_uuid));
+                itm.setItemValue(vm.getUUID());
+                listItems.add(itm);
+            }
+
+            {
+                ItemValue itm = new ItemValue();
+                itm.setItemTitle(getResources().getString(R.string.vm_status));
                 itm.setItemValue(vm.getPowerStatus());
                 listItems.add(itm);
             }
 
             {
-                ItemValue itm2 = new ItemValue();
-                itm2.setItemTitle("IP Address: ");
-                itm2.setItemValue(vm.getIpAddress());
-                listItems.add(itm2);
+                ItemValue itm = new ItemValue();
+                itm.setItemTitle(getResources().getString(R.string.vm_os));
+                itm.setItemValue(vm.getOSInfo());
+                listItems.add(itm);
             }
 
             {
                 ItemValue itm = new ItemValue();
-                itm.setItemTitle("UP Time: ");
+                itm.setItemTitle(getResources().getString(R.string.vm_memory));
+                itm.setItemValue(vm.getMemSize());
+                listItems.add(itm);
+            }
+
+            {
+                ItemValue itm = new ItemValue();
+                itm.setItemTitle(getResources().getString(R.string.vm_sr));
+                itm.setItemValue(vm.getSrInfo());
+                listItems.add(itm);
+            }
+
+            {
+                ItemValue itm = new ItemValue();
+                itm.setItemTitle(getResources().getString(R.string.vm_ip));
+                itm.setItemValue(vm.getIpAddress());
+                listItems.add(itm);
+            }
+
+            {
+                ItemValue itm = new ItemValue();
+                itm.setItemTitle(getResources().getString(R.string.vm_nic));
+                itm.setItemValue(vm.getNicNum());
+                listItems.add(itm);
+            }
+
+            {
+                ItemValue itm = new ItemValue();
+                itm.setItemTitle(getResources().getString(R.string.vm_mac));
+                itm.setItemValue(vm.getMac());
+                listItems.add(itm);
+            }
+
+            {
+                ItemValue itm = new ItemValue();
+                itm.setItemTitle(getResources().getString(R.string.vm_template));
+                itm.setItemValue(vm.getTemplateName());
+                listItems.add(itm);
+            }
+
+            {
+                ItemValue itm = new ItemValue();
+                itm.setItemTitle(getResources().getString(R.string.vm_uptime));
                 itm.setItemValue(vm.getUptime());
                 listItems.add(itm);
             }
@@ -262,7 +311,7 @@ public class VMDetailsActivity extends ListActivity {
             }
 
             Log.d("getView ItemName:", item.getItemTitle());
-            Log.d("getView ItemValue:", item.getItemValue());
+//            Log.d("getView ItemValue:", item.getItemValue());
             holder.item = item;
             TextView vm_detail_title_view = (TextView) holder.itemView.findViewById(R.id.vm_detail_title);
             TextView vm_detail_value_view = (TextView) holder.itemView.findViewById(R.id.vm_detail_value);

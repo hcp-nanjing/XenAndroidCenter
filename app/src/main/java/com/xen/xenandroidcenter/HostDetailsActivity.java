@@ -173,16 +173,65 @@ public class HostDetailsActivity extends ListActivity {
         if(host != null) {
             {
                 ItemValue itm = new ItemValue();
-                itm.setItemTitle("Host Name: ");
+                itm.setItemTitle(getResources().getString(R.string.host_name));
                 itm.setItemValue(host.getName());
                 listItems.add(itm);
             }
 
             {
-                ItemValue itm2 = new ItemValue();
-                itm2.setItemTitle("Role: ");
-                itm2.setItemValue(host.getRole());
-                listItems.add(itm2);
+                ItemValue itm = new ItemValue();
+                itm.setItemTitle(getResources().getString(R.string.host_uuid));
+                itm.setItemValue(host.getUUID());
+                listItems.add(itm);
+            }
+
+            {
+                ItemValue itm = new ItemValue();
+                itm.setItemTitle(getResources().getString(R.string.host_cpu));
+                itm.setItemValue(host.getCPUUsage());
+                listItems.add(itm);
+            }
+
+            {
+                ItemValue itm = new ItemValue();
+                itm.setItemTitle(getResources().getString(R.string.host_memory));
+                itm.setItemValue(host.getMemSize());
+                listItems.add(itm);
+            }
+
+            {
+                ItemValue itm = new ItemValue();
+                itm.setItemTitle(getResources().getString(R.string.host_ip));
+                itm.setItemValue(host.getIpAddress());
+                listItems.add(itm);
+            }
+
+            {
+                ItemValue itm = new ItemValue();
+                itm.setItemTitle(getResources().getString(R.string.host_version));
+                itm.setItemValue(host.getVersion());
+                listItems.add(itm);
+            }
+
+            {
+                ItemValue itm = new ItemValue();
+                itm.setItemTitle(getResources().getString(R.string.host_maintenance));
+                itm.setItemValue(host.getMantaineMode());
+                listItems.add(itm);
+            }
+
+            {
+                ItemValue itm = new ItemValue();
+                itm.setItemTitle(getResources().getString(R.string.host_role));
+                itm.setItemValue(host.getRole());
+                listItems.add(itm);
+            }
+
+            {
+                ItemValue itm = new ItemValue();
+                itm.setItemTitle(getResources().getString(R.string.host_uptime));
+                itm.setItemValue(host.getUptime());
+                listItems.add(itm);
             }
         }
 
