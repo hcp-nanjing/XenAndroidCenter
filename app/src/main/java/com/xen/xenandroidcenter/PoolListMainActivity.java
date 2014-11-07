@@ -80,6 +80,14 @@ public class PoolListMainActivity extends ListActivity {
         super.onResume();
     }
 
+    @Override
+    protected void onDestroy() {
+        for(String key : mContext.sessionDB.keySet()) {
+            mContext.disconnect(mContext.sessionDB.get(key));
+        }
+        super.onDestroy();
+    }
+
     static class PoolListViewHolder {
         View itemView;
         PoolItem item;

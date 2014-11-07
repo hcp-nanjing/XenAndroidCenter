@@ -1,25 +1,32 @@
 package com.xen.xenandroidcenter;
 
 import android.app.Application;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.List;
+import java.util.Set;
 
 import com.xensource.xenapi.Connection;
 import com.xensource.xenapi.HostMetrics;
+import com.xensource.xenapi.Event;
 import com.xensource.xenapi.Session;
 import com.xensource.xenapi.Host;
 import com.xensource.xenapi.Pool;
 import com.xensource.xenapi.VBD;
 import com.xensource.xenapi.VIF;
+import com.xensource.xenapi.Types;
 import com.xensource.xenapi.VM;
 import com.xensource.xenapi.VMGuestMetrics;
 import com.xensource.xenapi.VDI;
+
+import org.apache.xmlrpc.XmlRpcException;
 
 /**
  * Created by zhengc on 11/5/2014.
@@ -33,6 +40,13 @@ public class XenAndroidApplication extends Application {
     public static final String SESSIONID = "SESSIONID";
     public static final String HOSTUUID = "HOSTUUID";
     public static final String VMUUID = "VMUUID";
+    private static boolean eventMonitorTaskExecutingFlag = true;
+
+    @Override
+    public void onTerminate() {
+        eventMonitorTaskExecutingFlag = false;
+        super.onTerminate();
+    }
 
     public static Map<String, HostItem> ComposeHosts(Connection connection) throws Exception {
         Map<Host, Host.Record> HostRecords = Host.getAllRecords(connection);
@@ -137,6 +151,8 @@ public class XenAndroidApplication extends Application {
             targetServer.setConnection(connection);
             sessionDB.put(sessionUUID, targetServer);
 
+            new EventMonitorAsyncTask(targetServer).execute((Void)null);
+
             return sessionUUID;
 
         }catch (Exception e) {
@@ -147,9 +163,50 @@ public class XenAndroidApplication extends Application {
 
     }
 
-    public static void disconnect(PoolItem targetServer) throws XenAndroidException {
-        if(targetServer.getConnection() != null) {
-            targetServer.getConnection().dispose();
+    private static class EventMonitorAsyncTask extends AsyncTask<Void, Void, Void> {
+        private PoolItem targetServer;
+
+        public EventMonitorAsyncTask(PoolItem targetServer) {
+            this.targetServer = targetServer;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            Set<String> eventSet = new HashSet<String>();
+            eventSet.add("*");
+
+            try {
+
+                Event.register(this.targetServer.getConnection(), eventSet);
+
+                int eventsReceived = 0;
+                long started = System.currentTimeMillis();
+
+
+                while (eventMonitorTaskExecutingFlag)
+                {
+                    Set<Event.Record> events = Event.next(this.targetServer.getConnection());
+
+                    for (Event.Record e : events) {
+                        Log.d("Event: ", e.clazz + e.id + e.objUuid + e.operation + e.ref);
+                    }
+                    eventsReceived += events.size();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return (Void)null;
+        }
+    };
+
+    public static void disconnect(PoolItem targetServer) {
+        try {
+            if (targetServer.getConnection() != null) {
+                targetServer.getConnection().dispose();
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -165,7 +222,6 @@ public class XenAndroidApplication extends Application {
         try {
 
             connection = targetServer.getConnection();
-            Session.loginWithPassword(connection, targetServer.getUserName(), targetServer.getPassword(), "1.3");
             VM vmItem = VM.getByUuid(connection, UUID);
             vmItem.start(connection, false, false);
 
@@ -191,6 +247,54 @@ public class XenAndroidApplication extends Application {
             connection = targetServer.getConnection();
             VM vmItem = VM.getByUuid(connection, UUID);
             vmItem.cleanShutdown(connection);
+
+        }catch (Exception e) {
+
+            e.printStackTrace();
+            XenAndroidException err = new XenAndroidException(XenAndroidException.ConnectXSError, e.toString());
+            throw err;
+
+        }
+    }
+
+    /**
+     *
+     * @param targetServer  -- Pool Master
+     * @param UUID   -- VM UUID
+     * @throws XenAndroidException
+     */
+    public static void suspendVM(PoolItem targetServer, String UUID) throws XenAndroidException
+    {
+        Connection connection = null;
+        try {
+            connection = targetServer.getConnection();
+            VM vmItem = VM.getByUuid(connection, UUID);
+            vmItem.suspend(connection);
+
+
+
+        }catch (Exception e) {
+
+            e.printStackTrace();
+            XenAndroidException err = new XenAndroidException(XenAndroidException.ConnectXSError, e.toString());
+            throw err;
+
+        }
+    }
+
+    /**
+     *
+     * @param targetServer  -- Pool Master
+     * @param UUID   -- VM UUID
+     * @throws XenAndroidException
+     */
+    public static void resumeVM(PoolItem targetServer, String UUID) throws XenAndroidException
+    {
+        Connection connection = null;
+        try {
+            connection = targetServer.getConnection();
+            VM vmItem = VM.getByUuid(connection, UUID);
+            vmItem.resume(connection, false, false);
 
         }catch (Exception e) {
 

@@ -67,6 +67,8 @@ public class VMDetailsActivity extends ListActivity {
     private final static int OPCODE_STARTVM = 0x10000001;
     private final static int OPCODE_STOPVM = 0x10000002;
     private final static int OPCODE_SNAPSHOTVM = 0x10000003;
+    private final static int OPCODE_SUSPENDVM = 0x10000004;
+    private final static int OPCODE_RESUMEVM = 0x10000005;
 
     private final static int OPSUCCESSMESSAGE = 0x00000001;
     private final static int OPSTARTMESSAGE = 0x00000002;
@@ -163,6 +165,14 @@ public class VMDetailsActivity extends ListActivity {
                     case R.id.snapshot_vm:
                         ExecuteOPAsyncTask snapshot_task = new ExecuteOPAsyncTask(OPCODE_SNAPSHOTVM);
                         snapshot_task.execute((Void)null);
+                        break;
+                    case R.id.suspend_vm:
+                        ExecuteOPAsyncTask suspend_task = new ExecuteOPAsyncTask(OPCODE_SUSPENDVM);
+                        suspend_task.execute((Void)null);
+                        break;
+                    case R.id.resume_vm:
+                        ExecuteOPAsyncTask resume_task = new ExecuteOPAsyncTask(OPCODE_RESUMEVM);
+                        resume_task.execute((Void)null);
                         break;
                 }
                 return true;

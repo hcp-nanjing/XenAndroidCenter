@@ -47,5 +47,7 @@
     <string name="templates">Templates</string>
     <string name="storage">Storage</string>
     <string name="network">Network</string>
+    <string name="suspend_vm">Suspend VM</string>
+    <string name="resume_vm">Resume VM</string>
 
 </resources>

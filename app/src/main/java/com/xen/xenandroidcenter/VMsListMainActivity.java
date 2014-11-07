@@ -198,6 +198,7 @@ public class VMsListMainActivity extends ListActivity {
 
             vm_name_view.setText(item.getName());
             vm_os_view.setText(item.getOSInfo());
+            Log.d("getView - OS", item.getOSInfo());
             String vmStatus = item.getPowerStatus();
             Log.d("getView", vmStatus);
 
@@ -243,10 +244,12 @@ public class VMsListMainActivity extends ListActivity {
 
         @Override
         protected void onPostExecute(final Boolean success) {
+
         }
 
         @Override
         protected void onCancelled() {
+
         }
     }
 }

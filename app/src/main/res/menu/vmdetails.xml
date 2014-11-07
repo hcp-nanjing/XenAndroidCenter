@@ -7,6 +7,12 @@
     <item android:id="@+id/start_vm"
         android:title="@string/start_vm"
         android:orderInCategory="100"/>
+    <item android:id="@+id/suspend_vm"
+        android:title="@string/suspend_vm"
+        android:orderInCategory="100"/>
+    <item android:id="@+id/resume_vm"
+        android:title="@string/resume_vm"
+        android:orderInCategory="100"/>
     <item android:id="@+id/snapshot_vm"
         android:title="@string/snapshot_vm"
         android:orderInCategory="100"/>
