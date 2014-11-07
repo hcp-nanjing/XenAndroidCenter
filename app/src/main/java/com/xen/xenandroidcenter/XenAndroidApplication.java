@@ -19,6 +19,7 @@ import com.xensource.xenapi.Event;
 import com.xensource.xenapi.Session;
 import com.xensource.xenapi.Host;
 import com.xensource.xenapi.Pool;
+import com.xensource.xenapi.Task;
 import com.xensource.xenapi.VBD;
 import com.xensource.xenapi.VIF;
 import com.xensource.xenapi.Types;
@@ -156,7 +157,7 @@ public class XenAndroidApplication extends Application {
             targetServer.setConnection(connection);
             sessionDB.put(sessionUUID, targetServer);
 
-            //new EventMonitorAsyncTask(targetServer).execute((Void)null);
+            new EventMonitorAsyncTask(targetServer).execute((Void)null);
 
             return sessionUUID;
 
@@ -251,7 +252,17 @@ public class XenAndroidApplication extends Application {
         try {
             connection = targetServer.getConnection();
             VM vmItem = VM.getByUuid(connection, UUID);
-            vmItem.cleanShutdown(connection);
+            Task taskRef = vmItem.cleanShutdownAsync(connection);
+
+            while (taskRef.getStatus(connection).equals("pending")) {
+                Types.VmPowerState newPowerState = vmItem.getPowerState(connection);
+                Log.d("stopVM", newPowerState.toString());
+                Thread.sleep(1000);
+            }
+            taskRef.destroy(connection);
+
+            Types.VmPowerState newPowerState = vmItem.getPowerState(connection);
+            Log.d("stopVMAfterDestory", newPowerState.toString());
 
         }catch (Exception e) {
 
@@ -275,7 +286,6 @@ public class XenAndroidApplication extends Application {
             connection = targetServer.getConnection();
             VM vmItem = VM.getByUuid(connection, UUID);
             vmItem.suspend(connection);
-
 
 
         }catch (Exception e) {
