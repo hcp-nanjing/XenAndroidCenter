@@ -54,7 +54,7 @@ public class XenAndroidApplication extends Application {
         Map<String, VmItem> VMs = new HashMap<String, VmItem>();
 
         for (VM key: allrecords.keySet()) {
-            String osInfo = "NO XENSERVER TOOL";
+            String osInfo = "No XenServer Tool";
             VM.Record vmItem = allrecords.get(key);
 
             if(vmItem.isATemplate || vmItem.isControlDomain || vmItem.isASnapshot || vmItem.isSnapshotFromVmpp) {
@@ -63,9 +63,11 @@ public class XenAndroidApplication extends Application {
 
             for (VMGuestMetrics vmGuestM: vmGuestMs.keySet()) {
                 VMGuestMetrics.Record vmGuestMR = vmGuestMs.get(vmGuestM);
-                if( vmGuestMR.uuid.equals(vmItem.uuid))
-                {
+                if( vmGuestMR.uuid.equals(vmItem.uuid)) {
                     osInfo = vmGuestMR.osVersion.get("name");
+                    if(osInfo == null || osInfo.length() < 1) {
+                        osInfo = "No XenServer Tool";
+                    }
                 }
             }
 
@@ -108,6 +110,7 @@ public class XenAndroidApplication extends Application {
             targetServer.setSessionUUID(sessionUUID);
             targetServer.setConnection(connection);
             sessionDB.put(sessionUUID, targetServer);
+
             return sessionUUID;
 
         }catch (Exception e) {

@@ -199,6 +199,7 @@ public class HostsListMainActivity extends ListActivity {
             ImageView left_icon = (ImageView)holder.itemView.findViewById(R.id.left_icon);
 
             host_name_view.setText(item.getName());
+            host_desc_view.setText(item.getIpAddress());
             if(listItems.size() > 1) {
                 left_icon.setImageResource(R.drawable.poolicon);
             }
