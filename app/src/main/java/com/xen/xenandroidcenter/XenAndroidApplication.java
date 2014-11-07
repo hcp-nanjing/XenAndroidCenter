@@ -90,7 +90,7 @@ public class XenAndroidApplication extends Application {
                 VMGuestMetrics vmGuestM = VMGuestMetrics.getByUuid(connection, vmItem.guestMetrics.getUuid(connection));
                 VMGuestMetrics.Record vmGuestMR = vmGuestM.getRecord(connection);
                 if (vmGuestMR.osVersion != null && vmGuestMR.osVersion.containsKey("name"))
-                    osInfo = vmGuestMR.osVersion.get("name");
+                    osInfo = vmGuestMR.osVersion.get("name").substring(0, vmGuestMR.osVersion.get("name").indexOf('|'));
                 if(vmGuestMR.networks != null && !vmGuestMR.networks.isEmpty())
                     ip = vmGuestMR.networks.get("0/ip");
 
