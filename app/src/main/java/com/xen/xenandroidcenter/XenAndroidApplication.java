@@ -14,6 +14,7 @@ import com.xensource.xenapi.Connection;
 import com.xensource.xenapi.Session;
 import com.xensource.xenapi.Host;
 import com.xensource.xenapi.Pool;
+import com.xensource.xenapi.VIF;
 import com.xensource.xenapi.VM;
 import com.xensource.xenapi.VMGuestMetrics;
 
@@ -50,29 +51,30 @@ public class XenAndroidApplication extends Application {
 
     public static Map<String, VmItem> ComposeVMs(Connection connection) throws Exception {
         Map<VM, VM.Record> allrecords = VM.getAllRecords(connection);
-        Map<VMGuestMetrics, VMGuestMetrics.Record> vmGuestMs = VMGuestMetrics.getAllRecords(connection);
         Map<String, VmItem> VMs = new HashMap<String, VmItem>();
 
         for (VM key: allrecords.keySet()) {
             String osInfo = "No XenServer Tool";
+            String ip = "No XenServer Tool";
+            String mac = "NO XENSERVER TOOL";
             VM.Record vmItem = allrecords.get(key);
 
             if(vmItem.isATemplate || vmItem.isControlDomain || vmItem.isASnapshot || vmItem.isSnapshotFromVmpp) {
                 continue;
             }
 
-            for (VMGuestMetrics vmGuestM: vmGuestMs.keySet()) {
-                VMGuestMetrics.Record vmGuestMR = vmGuestMs.get(vmGuestM);
-                if( vmGuestMR.uuid.equals(vmItem.uuid)) {
+            try {
+                VMGuestMetrics vmGuestM = VMGuestMetrics.getByUuid(connection, vmItem.guestMetrics.getUuid(connection));
+                VMGuestMetrics.Record vmGuestMR = vmGuestM.getRecord(connection);
+                if (vmGuestMR.osVersion != null && vmGuestMR.osVersion.containsKey("name"))
                     osInfo = vmGuestMR.osVersion.get("name");
-                    if(osInfo == null || osInfo.length() < 1) {
-                        osInfo = "No XenServer Tool";
-                    }
-                }
+                if(vmGuestMR.networks != null && !vmGuestMR.networks.isEmpty())
+                    ip = vmGuestMR.networks.values().toString();
             }
-
-            VmItem tmpVM = new VmItem("vmItem.ip", vmItem.nameLabel, vmItem.uuid, vmItem.memoryTarget.toString(), osInfo, "String NicNum",
-                    "String Mac", vmItem.otherConfig.get("base_template_name"), vmItem.powerState.toString(), "String Uptime", vmItem.otherConfig.get("base_template_name"));
+            catch (Exception e)
+            {}
+            VmItem tmpVM = new VmItem(ip, vmItem.nameLabel, vmItem.uuid, vmItem.memoryTarget.toString(), osInfo, "String NicNum",
+                    mac, vmItem.otherConfig.get("base_template_name"), vmItem.powerState.toString(), "String Uptime", vmItem.otherConfig.get("base_template_name"));
             VMs.put(tmpVM.getUUID(), tmpVM);
         }
 
