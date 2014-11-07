@@ -24,6 +24,7 @@ import android.widget.TextView;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 public class HostsListMainActivity extends ListActivity {
@@ -220,8 +221,8 @@ public class HostsListMainActivity extends ListActivity {
 
         @Override
         protected Boolean doInBackground(Void... params) {
-
-            listItems = mContext.sessionDB.get(this.sessID).getHosts();
+            Map<String, HostItem> hosts = mContext.sessionDB.get(this.sessID).getHosts();
+            listItems = new ArrayList<HostItem>(hosts.values());
 
             Log.d("HOSTSLIST", listItems.size() + "");
 

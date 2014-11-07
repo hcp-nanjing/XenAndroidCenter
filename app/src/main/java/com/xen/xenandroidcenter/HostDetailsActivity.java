@@ -167,17 +167,8 @@ public class HostDetailsActivity extends ListActivity {
     }
 
     private void populateDetailItems() {
-
-        List<HostItem> hosts = mContext.sessionDB.get(sessionUUID).getHosts();
-
-        //Find out the host in the Host list
-        for(HostItem itm : hosts) {
-            if(itm.getUUID().equals(this.hostUUID)) {
-                host = itm;
-                break;
-            }
-        }
-
+        //Get out the host in the Host list
+        host = mContext.sessionDB.get(sessionUUID).getHosts().get(this.hostUUID);
 
         if(host != null) {
             {

@@ -9,42 +9,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
-import java.util.Set;
-
-
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLSession;
 
 import com.xensource.xenapi.Connection;
 import com.xensource.xenapi.Session;
-import com.xensource.xenapi.APIVersion;
-import com.xensource.xenapi.Bond;
-import com.xensource.xenapi.Console;
-import com.xensource.xenapi.Crashdump;
 import com.xensource.xenapi.Host;
-import com.xensource.xenapi.HostCpu;
-import com.xensource.xenapi.HostCrashdump;
-import com.xensource.xenapi.HostMetrics;
-import com.xensource.xenapi.HostPatch;
-import com.xensource.xenapi.Network;
-import com.xensource.xenapi.PBD;
-import com.xensource.xenapi.PIF;
-import com.xensource.xenapi.PIFMetrics;
 import com.xensource.xenapi.Pool;
-import com.xensource.xenapi.PoolPatch;
-import com.xensource.xenapi.SM;
-import com.xensource.xenapi.SR;
-import com.xensource.xenapi.Task;
-import com.xensource.xenapi.VBD;
-import com.xensource.xenapi.VBDMetrics;
-import com.xensource.xenapi.VDI;
-import com.xensource.xenapi.VIF;
-import com.xensource.xenapi.VIFMetrics;
-import com.xensource.xenapi.VLAN;
 import com.xensource.xenapi.VM;
 import com.xensource.xenapi.VMGuestMetrics;
-import com.xensource.xenapi.VMMetrics;
 
 /**
  * Created by zhengc on 11/5/2014.
@@ -59,33 +30,37 @@ public class XenAndroidApplication extends Application {
     public static final String HOSTUUID = "HOSTUUID";
     public static final String VMUUID = "VMUUID";
 
-    public static List<HostItem> ComposeHost(Connection connection) throws Exception {
+    public static Map<String, HostItem> ComposeHosts(Connection connection) throws Exception {
         Map<Host, Host.Record> HostRecords = Host.getAllRecords(connection);
 
-        List<HostItem> hostsList = new ArrayList<HostItem>();
+        Map<String, HostItem> hostsList = new HashMap<String, HostItem>();
         for (Host host: HostRecords.keySet()) {
             Host.Record hostR = HostRecords.get(host);
-            String memUsgae = host.getMemoryOverhead(connection).toString();
+            String memUsage = host.getMemoryOverhead(connection).toString();
 
-
-            HostItem tmp = new HostItem(hostR.address, hostR.nameLabel, hostR.uuid, memUsgae, hostR.powerOnMode, "ismaster",
+            HostItem tmpHost = new HostItem(hostR.address, hostR.nameLabel, hostR.uuid, memUsage, hostR.powerOnMode, "ismaster",
                     hostR.edition, hostR.cpuInfo.toString(), "String Uptime");
             Log.d("host ", hostR.hostname);
-            hostsList.add(tmp);
+
+            hostsList.put(tmpHost.getUUID(), tmpHost);
         }
 
         return hostsList;
     }
 
-    public static List<VmItem> ComposeVMs(Connection connection) throws Exception {
+    public static Map<String, VmItem> ComposeVMs(Connection connection) throws Exception {
         Map<VM, VM.Record> allrecords = VM.getAllRecords(connection);
         Map<VMGuestMetrics, VMGuestMetrics.Record> vmGuestMs = VMGuestMetrics.getAllRecords(connection);
-        List<VmItem> VMs = new ArrayList<VmItem>();
+        Map<String, VmItem> VMs = new HashMap<String, VmItem>();
+
         for (VM key: allrecords.keySet()) {
             String osInfo = "NO XENSERVER TOOL";
             VM.Record vmItem = allrecords.get(key);
-            if(vmItem.isATemplate || vmItem.isControlDomain || vmItem.isASnapshot || vmItem.isSnapshotFromVmpp)
+
+            if(vmItem.isATemplate || vmItem.isControlDomain || vmItem.isASnapshot || vmItem.isSnapshotFromVmpp) {
                 continue;
+            }
+
             for (VMGuestMetrics vmGuestM: vmGuestMs.keySet()) {
                 VMGuestMetrics.Record vmGuestMR = vmGuestMs.get(vmGuestM);
                 if( vmGuestMR.uuid.equals(vmItem.uuid))
@@ -94,9 +69,9 @@ public class XenAndroidApplication extends Application {
                 }
             }
 
-            VmItem tmp = new VmItem("vmItem.ip", vmItem.nameLabel, vmItem.uuid, vmItem.memoryTarget.toString(), osInfo, "String NicNum",
+            VmItem tmpVM = new VmItem("vmItem.ip", vmItem.nameLabel, vmItem.uuid, vmItem.memoryTarget.toString(), osInfo, "String NicNum",
                     "String Mac", vmItem.otherConfig.get("base_template_name"), vmItem.powerState.toString(), "String Uptime", vmItem.otherConfig.get("base_template_name"));
-            VMs.add(tmp);
+            VMs.put(tmpVM.getUUID(), tmpVM);
         }
 
         return VMs;
@@ -109,6 +84,7 @@ public class XenAndroidApplication extends Application {
      */
     public static String connect(PoolItem targetServer) throws XenAndroidException {
         Connection connection = null;
+
         try {
             connection = getConnection(targetServer);
 
@@ -116,15 +92,20 @@ public class XenAndroidApplication extends Application {
             String sessionUUID = sessionRef.getUuid(connection);
             targetServer.setSession(sessionRef);
             Map<Pool, Pool.Record> poolRecord =  Pool.getAllRecords(connection);
-            if(poolRecord.isEmpty())
+
+            if(poolRecord.isEmpty()) {
+
                 targetServer.setHostName(sessionRef.getThisHost(connection).getNameLabel(connection));
-            else
-                for (Pool pool: poolRecord.keySet()) {
+
+            } else {
+                for (Pool pool : poolRecord.keySet()) {
                     Pool.Record poolR = poolRecord.get(pool);
                     targetServer.setHostName(pool.getNameLabel(connection));
                     break;
                 }
-            targetServer.setHosts(ComposeHost(connection));
+            }
+
+            targetServer.setHosts(ComposeHosts(connection));
             targetServer.setVMs(ComposeVMs(connection));
             targetServer.setSessionUUID(sessionUUID);
             sessionDB.put(sessionUUID, targetServer);
@@ -142,22 +123,27 @@ public class XenAndroidApplication extends Application {
 
     }
 
+    /**
+     *
+     * @param targetServer  -- Pool Master
+     * @param UUID   -- VM UUID
+     * @throws XenAndroidException
+     */
     public static void startVM(PoolItem targetServer, String UUID) throws XenAndroidException
     {
         Connection connection = null;
         try {
+
             connection = getConnection(targetServer);
-            Map<VM, VM.Record> allrecords = VM.getAllRecords(connection);
-            for (VM vm : allrecords.keySet()) {
-                if (vm.getUuid(connection).equals(UUID)) {
-                    vm.start(connection, false, false);
-                    break;
-                }
-            }
+            VM vmItem = VM.getByUuid(connection, UUID);
+            vmItem.start(connection, false, false);
+
         }catch (Exception e) {
+
             e.printStackTrace();
             XenAndroidException err = new XenAndroidException(XenAndroidException.ConnectXSError, e.toString());
             throw err;
+
         }finally {
             if(connection != null) {
                 connection.dispose();
@@ -165,22 +151,27 @@ public class XenAndroidApplication extends Application {
         }
     }
 
+    /**
+     *
+     * @param targetServer  -- Pool Master
+     * @param UUID -- VM UUID
+     * @throws XenAndroidException
+     */
     public static void stopVM(PoolItem targetServer, String UUID) throws XenAndroidException
     {
         Connection connection = null;
         try {
             connection = getConnection(targetServer);
-            Map<VM, VM.Record> allrecords = VM.getAllRecords(connection);
-            for (VM vm: allrecords.keySet()) {
-                if(vm.getUuid(connection).equals(UUID)) {
-                    vm.cleanShutdown(connection);
-                    break;
-                }
-            }
+
+            VM vmItem = VM.getByUuid(connection, UUID);
+            vmItem.cleanShutdown(connection);
+
         }catch (Exception e) {
+
             e.printStackTrace();
             XenAndroidException err = new XenAndroidException(XenAndroidException.ConnectXSError, e.toString());
             throw err;
+
         }finally {
             if(connection != null) {
                 connection.dispose();
@@ -188,18 +179,22 @@ public class XenAndroidApplication extends Application {
         }
     }
 
+    /**
+     *
+     * @param targetServer  -- Pool Master
+     * @param UUID  -- VM UUID
+     * @param snapshotName
+     * @throws XenAndroidException
+     */
     public static void snapshotVM(PoolItem targetServer, String UUID, String snapshotName) throws XenAndroidException
     {
         Connection connection = null;
         try {
+
             connection = getConnection(targetServer);
-            Map<VM, VM.Record> allrecords = VM.getAllRecords(connection);
-            for (VM vm : allrecords.keySet()) {
-                if (vm.getUuid(connection).equals(UUID)) {
-                    vm.snapshot(connection, snapshotName);
-                    break;
-                }
-            }
+            VM vmItem = VM.getByUuid(connection, UUID);
+            vmItem.snapshot(connection, snapshotName);
+
         }catch (Exception e) {
             e.printStackTrace();
             XenAndroidException err = new XenAndroidException(XenAndroidException.ConnectXSError, e.toString());
@@ -211,18 +206,21 @@ public class XenAndroidApplication extends Application {
         }
     }
 
+    /**
+     *
+     * @param targetServer
+     * @param UUID -- UUID of the Host
+     * @throws XenAndroidException
+     */
     public static void shutdownHost(PoolItem targetServer, String UUID) throws XenAndroidException
     {
         Connection connection = null;
         try {
+
             connection = getConnection(targetServer);
-            Map<Host, Host.Record> allrecords = Host.getAllRecords(connection);
-            for (Host host : allrecords.keySet()) {
-                if (host.getUuid(connection).equals(UUID)) {
-                    host.shutdown(connection);
-                    break;
-                }
-            }
+            Host hostItem = Host.getByUuid(connection, UUID);
+            hostItem.shutdown(connection);
+
         }catch (Exception e) {
             e.printStackTrace();
             XenAndroidException err = new XenAndroidException(XenAndroidException.ConnectXSError, e.toString());
@@ -234,19 +232,20 @@ public class XenAndroidApplication extends Application {
         }
     }
 
+    /**
+     *
+     * @param targetServer
+     * @param UUID  -- UUID of the Host
+     * @throws XenAndroidException
+     */
     public static void rebootHost(PoolItem targetServer, String UUID) throws XenAndroidException
     {
         Connection connection = null;
 
         try {
             connection = getConnection(targetServer);
-            Map<Host, Host.Record> allrecords = Host.getAllRecords(connection);
-            for (Host host : allrecords.keySet()) {
-                if (host.getUuid(connection).equals(UUID)) {
-                    host.reboot(connection);
-                    break;
-                }
-            }
+            Host hostItem = Host.getByUuid(connection, UUID);
+            hostItem.reboot(connection);
         }catch (Exception e) {
             e.printStackTrace();
             XenAndroidException err = new XenAndroidException(XenAndroidException.ConnectXSError, e.toString());

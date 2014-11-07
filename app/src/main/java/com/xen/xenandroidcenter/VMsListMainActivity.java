@@ -24,6 +24,7 @@ import android.widget.TextView;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 public class VMsListMainActivity extends ListActivity {
@@ -228,8 +229,8 @@ public class VMsListMainActivity extends ListActivity {
 
         @Override
         protected Boolean doInBackground(Void... params) {
-
-            listItems = mContext.sessionDB.get(this.sessID).getVMs();
+            Map<String, VmItem> VMs = mContext.sessionDB.get(this.sessID).getVMs();
+            listItems = new ArrayList<VmItem>(VMs.values());
 
             Log.d("VMSLIST", listItems.size() + "");
 

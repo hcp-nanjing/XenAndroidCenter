@@ -2,6 +2,7 @@ package com.xen.xenandroidcenter;
 
 import com.xensource.xenapi.Session;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by zhengc on 11/5/2014.
@@ -13,8 +14,8 @@ public class PoolItem {
     private String hostName;
     private String userName;
     private String password;
-    private List<VmItem> VMs;
-    private List<HostItem> Hosts;
+    private Map<String, VmItem> VMs;
+    private Map<String, HostItem> Hosts;
 
     public String getSessionUUID() {
         return sessionUUID;
@@ -66,19 +67,19 @@ public class PoolItem {
         return this.ipAddress;
     }
 
-    public List<VmItem> getVMs() {
+    public Map<String, VmItem> getVMs() {
         return VMs;
     }
 
-    public void setVMs(List<VmItem> VMs) {
+    public void setVMs(Map<String, VmItem> VMs) {
         this.VMs = VMs;
     }
 
-    public List<HostItem> getHosts() {
+    public Map<String, HostItem> getHosts() {
         return Hosts;
     }
 
-    public void setHosts(List<HostItem> Hosts) {
+    public void setHosts(Map<String, HostItem> Hosts) {
         this.Hosts = Hosts;
     }
 

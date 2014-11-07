@@ -171,22 +171,21 @@ public class VMDetailsActivity extends ListActivity {
     }
 
     private void populateDetailItems() {
-        List<VmItem> VMs = mContext.sessionDB.get(sessionUUID).getVMs();
-
         //Find out the VM in the VM list
-        for(VmItem itm : VMs) {
-            if(itm.getUUID().equals(this.vmUUID)) {
-                vm = itm;
-                break;
-            }
-        }
-
+        vm = mContext.sessionDB.get(sessionUUID).getVMs().get(this.vmUUID);
 
         if(vm != null) {
             {
                 ItemValue itm = new ItemValue();
                 itm.setItemTitle("VM Name: ");
                 itm.setItemValue(vm.getName());
+                listItems.add(itm);
+            }
+
+            {
+                ItemValue itm = new ItemValue();
+                itm.setItemTitle("VM Status: ");
+                itm.setItemValue(vm.getPowerStatus());
                 listItems.add(itm);
             }
 
