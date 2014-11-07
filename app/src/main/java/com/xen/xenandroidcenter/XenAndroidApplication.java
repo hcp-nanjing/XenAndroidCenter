@@ -83,11 +83,9 @@ public class XenAndroidApplication extends Application {
      *
      */
     public static String connect(PoolItem targetServer) throws XenAndroidException {
-        Connection connection = null;
-
         try {
-            connection = getConnection(targetServer);
-
+            URL url = new URL("http://" + targetServer.getIpAddress());
+            Connection connection = new Connection(url);
             Session sessionRef = Session.loginWithPassword(connection, targetServer.getUserName(), targetServer.getPassword(), "1.3");
             String sessionUUID = sessionRef.getUuid(connection);
             targetServer.setSession(sessionRef);
@@ -108,6 +106,7 @@ public class XenAndroidApplication extends Application {
             targetServer.setHosts(ComposeHosts(connection));
             targetServer.setVMs(ComposeVMs(connection));
             targetServer.setSessionUUID(sessionUUID);
+            targetServer.setConnection(connection);
             sessionDB.put(sessionUUID, targetServer);
             return sessionUUID;
 
@@ -115,12 +114,14 @@ public class XenAndroidApplication extends Application {
             e.printStackTrace();
             XenAndroidException err = new XenAndroidException(XenAndroidException.ConnectXSError, e.toString());
             throw err;
-        }finally {
-            if(connection != null) {
-                connection.dispose();
-            }
         }
 
+    }
+
+    public static void disconnect(PoolItem targetServer) throws XenAndroidException {
+        if(targetServer.getConnection() != null) {
+            targetServer.getConnection().dispose();
+        }
     }
 
     /**
@@ -134,7 +135,8 @@ public class XenAndroidApplication extends Application {
         Connection connection = null;
         try {
 
-            connection = getConnection(targetServer);
+            connection = targetServer.getConnection();
+            Session.loginWithPassword(connection, targetServer.getUserName(), targetServer.getPassword(), "1.3");
             VM vmItem = VM.getByUuid(connection, UUID);
             vmItem.start(connection, false, false);
 
@@ -144,10 +146,6 @@ public class XenAndroidApplication extends Application {
             XenAndroidException err = new XenAndroidException(XenAndroidException.ConnectXSError, e.toString());
             throw err;
 
-        }finally {
-            if(connection != null) {
-                connection.dispose();
-            }
         }
     }
 
@@ -161,8 +159,7 @@ public class XenAndroidApplication extends Application {
     {
         Connection connection = null;
         try {
-            connection = getConnection(targetServer);
-
+            connection = targetServer.getConnection();
             VM vmItem = VM.getByUuid(connection, UUID);
             vmItem.cleanShutdown(connection);
 
@@ -172,14 +169,10 @@ public class XenAndroidApplication extends Application {
             XenAndroidException err = new XenAndroidException(XenAndroidException.ConnectXSError, e.toString());
             throw err;
 
-        }finally {
-            if(connection != null) {
-                connection.dispose();
-            }
         }
     }
 
-    /**
+    /**setSessionUUID
      *
      * @param targetServer  -- Pool Master
      * @param UUID  -- VM UUID
@@ -191,7 +184,7 @@ public class XenAndroidApplication extends Application {
         Connection connection = null;
         try {
 
-            connection = getConnection(targetServer);
+            connection = targetServer.getConnection();
             VM vmItem = VM.getByUuid(connection, UUID);
             vmItem.snapshot(connection, snapshotName);
 
@@ -199,10 +192,6 @@ public class XenAndroidApplication extends Application {
             e.printStackTrace();
             XenAndroidException err = new XenAndroidException(XenAndroidException.ConnectXSError, e.toString());
             throw err;
-        }finally {
-            if(connection != null) {
-                connection.dispose();
-            }
         }
     }
 
@@ -217,7 +206,7 @@ public class XenAndroidApplication extends Application {
         Connection connection = null;
         try {
 
-            connection = getConnection(targetServer);
+            connection = targetServer.getConnection();
             Host hostItem = Host.getByUuid(connection, UUID);
             hostItem.shutdown(connection);
 
@@ -225,10 +214,6 @@ public class XenAndroidApplication extends Application {
             e.printStackTrace();
             XenAndroidException err = new XenAndroidException(XenAndroidException.ConnectXSError, e.toString());
             throw err;
-        }finally {
-            if(connection != null) {
-                connection.dispose();
-            }
         }
     }
 
@@ -243,29 +228,13 @@ public class XenAndroidApplication extends Application {
         Connection connection = null;
 
         try {
-            connection = getConnection(targetServer);
+            connection = targetServer.getConnection();
             Host hostItem = Host.getByUuid(connection, UUID);
             hostItem.reboot(connection);
         }catch (Exception e) {
             e.printStackTrace();
             XenAndroidException err = new XenAndroidException(XenAndroidException.ConnectXSError, e.toString());
             throw err;
-        }finally {
-            if(connection != null) {
-                connection.dispose();
-            }
         }
     }
-
-    private static Connection getConnection(PoolItem targetServer) throws MalformedURLException {
-
-        Log.d("getConnection - Username: ", targetServer.getUserName());
-        Log.d("getConnection - password: ", targetServer.getPassword());
-        Log.d("getConnection - IP: ", targetServer.getIpAddress());
-
-        URL url = new URL("http://" + targetServer.getIpAddress());
-
-        return new Connection(url);
-    }
-
 }

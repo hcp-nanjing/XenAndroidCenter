@@ -1,5 +1,6 @@
 package com.xen.xenandroidcenter;
 
+import com.xensource.xenapi.Connection;
 import com.xensource.xenapi.Session;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +11,7 @@ import java.util.Map;
 public class PoolItem {
 
     private String sessionUUID;
+    private Connection connection;
     private String ipAddress;
     private String hostName;
     private String userName;
@@ -81,6 +83,14 @@ public class PoolItem {
 
     public void setHosts(Map<String, HostItem> Hosts) {
         this.Hosts = Hosts;
+    }
+
+    public Connection getConnection() {
+        return connection;
+    }
+
+    public void setConnection(Connection connection) {
+        this.connection = connection;
     }
 
     public PoolItem (String ip, String host, String user, String pass) {
