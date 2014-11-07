@@ -75,7 +75,7 @@ public class VMDetailsActivity extends ListActivity {
     private final static int OPENDMESSAGE = 0x00000003;
     private final static int OPFAILMESSAGE = 0x00000004;
 
-    Handler msgHandler = new MHandler(this);
+    public Handler msgHandler = new MHandler(this);
     static class MHandler extends Handler {
         WeakReference<VMDetailsActivity> mActivity;
 
@@ -267,6 +267,8 @@ public class VMDetailsActivity extends ListActivity {
     }
 
     private void refleshAdaptorData() {
+        this.listItems.clear();
+        populateDetailItems();
         this.listAdapter.notifyDataSetChanged();
     }
 

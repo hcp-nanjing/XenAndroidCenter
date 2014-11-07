@@ -22,6 +22,11 @@ public class VmItem {
     private String NicNum;
     private String Mac;
     private String OSInfo;
+
+    public void setPowerStatus(String powerStatus) {
+        PowerStatus = powerStatus;
+    }
+
     private String PowerStatus;
     private String Uptime;
     private String TemplateName;

@@ -115,9 +115,6 @@ public class VMsListMainActivity extends ListActivity {
 
         this.showProgressDialog("Notice", "Please wait, loading......");
 
-        LoadVMsAsyncTask loadTask = new LoadVMsAsyncTask(sessionUUID, listItems);
-        loadTask.execute((Void) null);
-
         hostsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -136,6 +133,10 @@ public class VMsListMainActivity extends ListActivity {
     @Override
     protected void onResume() {
         Log.d("onResume", "onResume()");
+
+        LoadVMsAsyncTask loadTask = new LoadVMsAsyncTask(sessionUUID, listItems);
+        loadTask.execute((Void) null);
+
         super.onResume();
     }
 

@@ -157,7 +157,7 @@ public class XenAndroidApplication extends Application {
             targetServer.setConnection(connection);
             sessionDB.put(sessionUUID, targetServer);
 
-            new EventMonitorAsyncTask(targetServer).execute((Void)null);
+            //new EventMonitorAsyncTask(targetServer).execute((Void)null);
 
             return sessionUUID;
 
@@ -169,42 +169,42 @@ public class XenAndroidApplication extends Application {
 
     }
 
-    private static class EventMonitorAsyncTask extends AsyncTask<Void, Void, Void> {
-        private PoolItem targetServer;
-
-        public EventMonitorAsyncTask(PoolItem targetServer) {
-            this.targetServer = targetServer;
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            Set<String> eventSet = new HashSet<String>();
-            eventSet.add("*");
-
-            try {
-
-                Event.register(this.targetServer.getConnection(), eventSet);
-
-                int eventsReceived = 0;
-                long started = System.currentTimeMillis();
-
-
-                while (eventMonitorTaskExecutingFlag)
-                {
-                    Set<Event.Record> events = Event.next(this.targetServer.getConnection());
-
-                    for (Event.Record e : events) {
-                        Log.d("Event: ", e.clazz + e.id + e.objUuid + e.operation + e.ref);
-                    }
-                    eventsReceived += events.size();
-                }
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return (Void)null;
-        }
-    };
+//    private static class EventMonitorAsyncTask extends AsyncTask<Void, Void, Void> {
+//        private PoolItem targetServer;
+//
+//        public EventMonitorAsyncTask(PoolItem targetServer) {
+//            this.targetServer = targetServer;
+//        }
+//
+//        @Override
+//        protected Void doInBackground(Void... voids) {
+//            Set<String> eventSet = new HashSet<String>();
+//            eventSet.add("*");
+//
+//            try {
+//
+//                Event.register(this.targetServer.getConnection(), eventSet);
+//
+//                int eventsReceived = 0;
+//                long started = System.currentTimeMillis();
+//
+//
+//                while (eventMonitorTaskExecutingFlag)
+//                {
+//                    Set<Event.Record> events = Event.next(this.targetServer.getConnection());
+//
+//                    for (Event.Record e : events) {
+//                        Log.d("Event: ", e.clazz + e.id + e.objUuid + e.operation + e.ref);
+//                    }
+//                    eventsReceived += events.size();
+//                }
+//
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//            return (Void)null;
+//        }
+//    };
 
     public static void disconnect(PoolItem targetServer) {
         try {
@@ -254,7 +254,7 @@ public class XenAndroidApplication extends Application {
             VM vmItem = VM.getByUuid(connection, UUID);
             Task taskRef = vmItem.cleanShutdownAsync(connection);
 
-            while (taskRef.getStatus(connection).equals("pending")) {
+            while (taskRef.getStatus(connection) == Types.TaskStatusType.PENDING) {
                 Types.VmPowerState newPowerState = vmItem.getPowerState(connection);
                 Log.d("stopVM", newPowerState.toString());
                 Thread.sleep(1000);
@@ -263,6 +263,8 @@ public class XenAndroidApplication extends Application {
 
             Types.VmPowerState newPowerState = vmItem.getPowerState(connection);
             Log.d("stopVMAfterDestory", newPowerState.toString());
+
+            targetServer.getVMs().get(UUID).setPowerStatus(newPowerState.toString());
 
         }catch (Exception e) {
 
@@ -285,7 +287,20 @@ public class XenAndroidApplication extends Application {
         try {
             connection = targetServer.getConnection();
             VM vmItem = VM.getByUuid(connection, UUID);
-            vmItem.suspend(connection);
+
+            Task taskRef = vmItem.suspendAsync(connection);
+
+            while (taskRef.getStatus(connection) == Types.TaskStatusType.PENDING) {
+                Types.VmPowerState newPowerState = vmItem.getPowerState(connection);
+                Log.d("suspendVM", newPowerState.toString());
+                Thread.sleep(1000);
+            }
+            taskRef.destroy(connection);
+
+            Types.VmPowerState newPowerState = vmItem.getPowerState(connection);
+            Log.d("suspendVMVMAfterDestory", newPowerState.toString());
+
+            targetServer.getVMs().get(UUID).setPowerStatus(newPowerState.toString());
 
 
         }catch (Exception e) {
@@ -309,7 +324,20 @@ public class XenAndroidApplication extends Application {
         try {
             connection = targetServer.getConnection();
             VM vmItem = VM.getByUuid(connection, UUID);
-            vmItem.resume(connection, false, false);
+
+            Task taskRef = vmItem.resumeAsync(connection, false, false);
+
+            while (taskRef.getStatus(connection) == Types.TaskStatusType.PENDING) {
+                Types.VmPowerState newPowerState = vmItem.getPowerState(connection);
+                Log.d("resumeVM", newPowerState.toString());
+                Thread.sleep(1000);
+            }
+            taskRef.destroy(connection);
+
+            Types.VmPowerState newPowerState = vmItem.getPowerState(connection);
+            Log.d("resumeVM AfterDestory", newPowerState.toString());
+
+            targetServer.getVMs().get(UUID).setPowerStatus(newPowerState.toString());
 
         }catch (Exception e) {
 
@@ -334,7 +362,17 @@ public class XenAndroidApplication extends Application {
 
             connection = targetServer.getConnection();
             VM vmItem = VM.getByUuid(connection, UUID);
-            vmItem.snapshot(connection, snapshotName);
+
+            Task taskRef = vmItem.snapshotAsync(connection, snapshotName);
+
+            while (taskRef.getStatus(connection) == Types.TaskStatusType.PENDING) {
+                Types.VmPowerState newPowerState = vmItem.getPowerState(connection);
+                Log.d("resumeVM", newPowerState.toString());
+                Thread.sleep(1000);
+            }
+            taskRef.destroy(connection);
+
+            //update snapshot information in sessionDB
 
         }catch (Exception e) {
             e.printStackTrace();
@@ -356,7 +394,13 @@ public class XenAndroidApplication extends Application {
 
             connection = targetServer.getConnection();
             Host hostItem = Host.getByUuid(connection, UUID);
-            hostItem.shutdown(connection);
+
+            Task taskRef = hostItem.shutdownAsync(connection);
+
+            while (taskRef.getStatus(connection) == Types.TaskStatusType.PENDING) {
+                Thread.sleep(1000);
+            }
+            taskRef.destroy(connection);
 
         }catch (Exception e) {
             e.printStackTrace();
@@ -378,7 +422,15 @@ public class XenAndroidApplication extends Application {
         try {
             connection = targetServer.getConnection();
             Host hostItem = Host.getByUuid(connection, UUID);
-            hostItem.reboot(connection);
+
+            Task taskRef = hostItem.rebootAsync(connection);
+
+            while (taskRef.getStatus(connection) == Types.TaskStatusType.PENDING) {
+                Thread.sleep(1000);
+            }
+            taskRef.destroy(connection);
+
+
         }catch (Exception e) {
             e.printStackTrace();
             XenAndroidException err = new XenAndroidException(XenAndroidException.ConnectXSError, e.toString());
