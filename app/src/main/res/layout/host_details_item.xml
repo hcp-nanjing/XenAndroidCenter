@@ -25,7 +25,7 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_toRightOf="@id/host_detail_title"
-        android:gravity="start"
+        android:gravity="center"
         android:text="content"
         android:paddingBottom="10dp"
         android:paddingTop="10dp"
