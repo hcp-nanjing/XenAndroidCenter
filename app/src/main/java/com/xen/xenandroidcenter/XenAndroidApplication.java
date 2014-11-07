@@ -11,12 +11,15 @@ import java.util.Map;
 import java.util.List;
 
 import com.xensource.xenapi.Connection;
+import com.xensource.xenapi.HostMetrics;
 import com.xensource.xenapi.Session;
 import com.xensource.xenapi.Host;
 import com.xensource.xenapi.Pool;
+import com.xensource.xenapi.VBD;
 import com.xensource.xenapi.VIF;
 import com.xensource.xenapi.VM;
 import com.xensource.xenapi.VMGuestMetrics;
+import com.xensource.xenapi.VDI;
 
 /**
  * Created by zhengc on 11/5/2014.
@@ -37,10 +40,13 @@ public class XenAndroidApplication extends Application {
         Map<String, HostItem> hostsList = new HashMap<String, HostItem>();
         for (Host host: HostRecords.keySet()) {
             Host.Record hostR = HostRecords.get(host);
-            String memUsage = host.getMemoryOverhead(connection).toString();
+            HostMetrics HostM = host.getMetrics(connection);
+            HostMetrics.Record HostMR = HostM.getRecord(connection);
+            Long memoryTotal = HostMR.memoryTotal/1024/1024/1024;
+            String memUsage = memoryTotal + "GB";
 
             HostItem tmpHost = new HostItem(hostR.address, hostR.nameLabel, hostR.uuid, memUsage, hostR.powerOnMode, "ismaster",
-                    hostR.edition, hostR.cpuInfo.toString(), "String Uptime");
+                    hostR.softwareVersion.get("product_version"), hostR.cpuInfo.toString(), "String Uptime");
             Log.d("host ", hostR.hostname);
 
             hostsList.put(tmpHost.getUUID(), tmpHost);
@@ -55,6 +61,7 @@ public class XenAndroidApplication extends Application {
 
         for (VM key: allrecords.keySet()) {
             String osInfo = "No XenServer Tool";
+            String srInfo = "No XenServer Tool";
             String ip = "No XenServer Tool";
             String mac = "NO XENSERVER TOOL";
             VM.Record vmItem = allrecords.get(key);
@@ -70,11 +77,23 @@ public class XenAndroidApplication extends Application {
                     osInfo = vmGuestMR.osVersion.get("name");
                 if(vmGuestMR.networks != null && !vmGuestMR.networks.isEmpty())
                     ip = vmGuestMR.networks.get("0/ip");
+
+                for (VBD vbd : vmItem.VBDs) {
+                    VBD.Record vbdR = vbd.getRecord(connection);
+                    VDI vdi = vbd.getVDI(connection);
+                    if(vbdR.type.toString().equals("Disk"))
+                    {
+                        Long size = vdi.getVirtualSize(connection)/1024/1024/1024;
+                        srInfo = vdi.getNameLabel(connection) + ":" + size.toString() + "GB";
+                        break;
+                    }
+                }
             }
             catch (Exception e)
             {}
-            VmItem tmpVM = new VmItem(ip, vmItem.nameLabel, vmItem.uuid, vmItem.memoryTarget.toString(), osInfo, "String NicNum",
-                    mac, vmItem.otherConfig.get("base_template_name"), vmItem.powerState.toString(), "String Uptime", vmItem.otherConfig.get("base_template_name"));
+            Long mem = vmItem.memoryTarget/1024/1024;
+            VmItem tmpVM = new VmItem(ip, vmItem.nameLabel, vmItem.uuid, mem.toString() + "MB", srInfo, "String NicNum",
+                    mac, osInfo, vmItem.powerState.toString(), "String Uptime", vmItem.otherConfig.get("base_template_name"));
             VMs.put(tmpVM.getUUID(), tmpVM);
         }
 
